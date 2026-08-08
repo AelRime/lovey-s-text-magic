@@ -13,171 +13,43 @@
       color: #2c3e50;
       background-color: #f4f6f9;
       line-height: 1.5;
-    }
-    .header-area { max-width: 98%; margin: 0 0 15px 10px; }
-    h2 { margin: 0 0 6px 0; color: #1a252f; display: flex; align-items: center; gap: 10px; }
-    .badge { font-size: 12px; background: #e1f5fe; color: #0288d1; padding: 2px 8px; border-radius: 12px; font-weight: normal; }
-    p.desc { color: #666; font-size: 14px; margin: 0; }
-
-    /* 主版面：整體佈局 */
-    .main-container {
-      display: flex;
-      gap: 15px;
-      max-width: 100%;
-      margin: 0 10px;
       position: relative;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
-
-    /* 左側對照區域 */
-    .left-section {
-      width: 38%;
-      min-width: 280px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .editor-card {
-      background: #ffffff;
-      padding: 18px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      border: 1px solid #e2e8f0;
-    }
-    .editor-card.result-card { border-color: #3b82f6; }
-
-    label.section-title {
-      font-weight: bold;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-      font-size: 15px;
-    }
-
-    textarea {
+    
+    /* 1. 標題&說明區：單獨獨立，不限寬度，不與其他區塊對齊 */
+    .header-area { 
       width: 100%;
-      height: 280px;
-      min-height: 120px;
-      padding: 12px;
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      font-size: 15px;
-      font-family: inherit;
-      resize: both;
-      overflow: auto;
+      margin: 0 0 20px 10px;
     }
-    textarea:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
-    textarea[readonly] { background-color: #f8fafc; color: #1e293b; }
+    h2 { margin: 0 0 8px 0; color: #1a252f; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .badge { font-size: 12px; background: #e1f5fe; color: #0288d1; padding: 2px 8px; border-radius: 12px; font-weight: normal; }
+    p.desc { color: #666; font-size: 14px; margin: 2px 0; }
 
-    button {
-      padding: 8px 14px;
-      border: none;
-      border-radius: 6px;
-      background-color: #2563eb;
-      color: white;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    button:hover { background-color: #1d4ed8; }
-    button.secondary { background-color: #64748b; }
-    button.secondary:hover { background-color: #475569; }
-    button.success { background-color: #10b981; }
-    button.success:hover { background-color: #059669; }
-    button.warning { background-color: #f59e0b; color: #ffffff; }
-    button.warning:hover { background-color: #d97706; }
-
-    /* 綠線區域：固定式常用詞彙面板 */
-    .preset-panel {
-      width: 180px;
-      background: #ffffff;
-      border: 2px solid #10b981;
-      border-radius: 10px;
-      padding: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      flex-shrink: 0;
-    }
-    .preset-title {
-      font-weight: bold;
-      font-size: 13px;
-      color: #065f46;
-      border-bottom: 1px solid #a7f3d0;
-      padding-bottom: 6px;
-      margin: 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .preset-list {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      max-height: 250px;
-      overflow-y: auto;
-    }
-    .preset-btn {
-      width: 100%;
-      text-align: left;
-      padding: 6px 10px;
-      background: #f0fdf4;
-      color: #166534;
-      border: 1px solid #bbf7d0;
-      border-radius: 6px;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.2s;
-      user-select: none;
-    }
-    .preset-btn:hover {
-      background: #dcfce7;
-      border-color: #86efac;
-    }
-
-    .add-preset-box {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-top: 4px;
-      padding-top: 8px;
-      border-top: 1px dashed #cbd5e1;
-    }
-    .add-preset-box input {
-      width: 100%;
-      padding: 6px 8px;
-      border: 1px solid #cbd5e1;
-      border-radius: 4px;
-      font-size: 12px;
-    }
-
-    /* 懸浮視窗 */
-    .floating-panel {
-      width: 680px;
+    /* 通用獨立可拖移視窗基底 */
+    .draggable-card {
+      position: absolute;
       background: #ffffff;
       border-radius: 10px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
       border: 1px solid #cbd5e1;
-      position: fixed;
-      top: 60px;
-      right: 20px;
       display: flex;
       flex-direction: column;
-      max-height: calc(100vh - 80px);
-      min-height: 200px;
-      z-index: 1000;
+      z-index: 800;
       overflow: hidden;
+      resize: both; /* 允許自由雙向拉伸 */
+      transform-origin: top left; /* 縮放錨點設在左上角 */
+      transition: transform 0.15s ease-out;
     }
 
-    .panel-header {
-      padding: 12px 18px;
+    /* 暗色拖移握把（適用於字典與魔法箱） */
+    .card-drag-header {
+      padding: 8px 14px;
       background: #1e293b;
       color: #ffffff;
-      border-top-left-radius: 10px;
-      border-top-right-radius: 10px;
+      font-size: 13px;
+      font-weight: bold;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -185,325 +57,611 @@
       user-select: none;
       flex-shrink: 0;
     }
-    .panel-title { font-weight: bold; font-size: 15px; display: flex; align-items: center; gap: 6px; }
-    .drag-hint { font-size: 11px; background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 4px; font-weight: normal; color: #cbd5e1; }
-    .close-btn { background: none; border: none; color: #94a3b8; font-size: 18px; cursor: pointer; padding: 0 4px; }
-    .close-btn:hover { color: #ffffff; }
+    .card-drag-header .drag-hint { font-size: 11px; color: #94a3b8; font-weight: normal; margin-left: 6px; }
 
-    /* 置頂固定控制區域 */
-    .sticky-top-section {
-      padding: 16px 16px 8px 16px;
+    /* 頂部控鈕區（包含放大/縮小/關閉） */
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .scale-btn {
+      background: #334155;
+      border: 1px solid #475569;
+      color: #e2e8f0;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      cursor: pointer;
+      line-height: 1.2;
+    }
+    .scale-btn:hover {
+      background: #475569;
+      color: #ffffff;
+    }
+
+    /* 淺色拖移握把（適用於原始內文與變更結果） */
+    .card-drag-header-light {
+      padding: 10px 14px;
       background: #ffffff;
-      border-bottom: 1px solid #e2e8f0;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      flex-shrink: 0;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
-    }
-
-    .action-btn-bar {
-      display: flex;
-      gap: 8px;
-      background: #eff6ff;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #bfdbfe;
-      flex-wrap: wrap;
-    }
-
-    .search-inputs {
-      display: grid;
-      grid-template-columns: 1fr 1fr auto;
-      gap: 10px;
-      align-items: end;
-      background: #f8fafc;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #e2e8f0;
-    }
-    .input-group label { font-size: 12px; color: #475569; font-weight: 600; margin-bottom: 4px; display: block; }
-    .input-group input { width: 100%; padding: 7px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
-
-    .shortcut-hint { font-size: 12px; color: #64748b; margin-bottom: 4px; }
-
-    /* 下方獨立滾動區 */
-    .scrollable-results-section {
-      padding: 12px 16px 16px 16px;
-      overflow-y: auto;
-      flex: 1 1 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      min-height: 100px;
-    }
-
-    .select-all-bar {
+      color: #1e293b;
+      font-size: 14px;
+      font-weight: bold;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 8px 12px;
-      background: #f1f5f9;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 500;
+      cursor: move;
+      user-select: none;
+      flex-shrink: 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .card-drag-header-light.result-header {
+      background: #eff6ff;
+      border-bottom-color: #bfdbfe;
+    }
+    .card-drag-header-light .drag-hint { font-size: 11px; color: #64748b; font-weight: normal; }
+
+    /* 2. 各視窗預設位置與尺寸 */
+    
+    /* 原始內文 */
+    #card-raw {
+      top: 210px;
+      left: 30px;
+      width: 680px;
+      height: 350px;
+      min-width: 320px;
+      min-height: 200px;
     }
 
-    .compare-header {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1.1fr;
-      gap: 8px;
-      font-size: 12px;
-      font-weight: bold;
-      color: #475569;
-      padding: 0 4px;
+    /* 變更結果 */
+    #card-result {
+      top: 580px;
+      left: 30px;
+      width: 680px;
+      height: 350px;
+      min-width: 320px;
+      min-height: 200px;
+      border-color: #3b82f6;
     }
+
+    /* 字典：預設放大 120% (scale 1.2) */
+    #preset-window {
+      top: 210px;
+      left: 740px;
+      width: 340px;
+      height: auto;
+      min-width: 280px;
+      z-index: 850;
+      resize: none;
+      transform: scale(1.2);
+    }
+
+    /* 拉比的魔法箱：預設放大 120% (scale 1.2) */
+    #floating-panel {
+      top: 210px;
+      left: 1180px;
+      width: 780px;
+      max-height: calc(100vh - 230px);
+      min-width: 480px;
+      min-height: 200px;
+      z-index: 900;
+      resize: none;
+      transform: scale(1.2);
+    }
+
+    .editor-body {
+      padding: 12px;
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      height: calc(100% - 42px);
+    }
+
+    textarea {
+      width: 100%;
+      height: 100%;
+      flex: 1 1 auto;
+      padding: 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 15px;
+      font-family: inherit;
+      resize: none;
+      overflow: auto;
+    }
+    textarea:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+    textarea[readonly] { background-color: #f8fafc; color: #1e293b; }
+
+    /* 按鈕預設樣式 */
+    button {
+      padding: 6px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background-color: #ffffff;
+      color: #334155;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    button:hover { background-color: #f1f5f9; }
+
+    /* 詞庫面板樣式 */
+    .preset-panel-container {
+      display: flex;
+      gap: 8px;
+      padding: 10px;
+      background: #f8fafc;
+    }
+
+    .preset-panel {
+      flex: 1 1 0;
+      min-width: 135px;
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 520px;
+      overflow-y: auto;
+    }
+    .preset-panel.find-panel { border: 2px solid #10b981; }
+    .preset-panel.replace-panel { border: 2px solid #3b82f6; }
+
+    .preset-header-box {
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .find-panel .preset-header-box { border-color: #a7f3d0; }
+    .replace-panel .preset-header-box { border-color: #bfdbfe; }
+
+    .preset-title { font-weight: bold; font-size: 12px; margin: 0; }
+    .find-panel .preset-title { color: #065f46; }
+    .replace-panel .preset-title { color: #1e40af; }
+
+    .btn-row-sub { display: flex; gap: 6px; margin-top: 2px; }
+
+    .reset-link-btn {
+      background: none; border: none; color: #94a3b8; font-size: 10px; padding: 0; cursor: pointer; text-align: left; transition: color 0.2s;
+    }
+    .reset-link-btn:hover { color: #ef4444; text-decoration: underline; }
+    .reset-link-btn.clear-custom:hover { color: #f59e0b; }
+
+    .add-preset-row-top { display: flex; gap: 4px; margin-top: 4px; margin-bottom: 4px; }
+    .add-preset-row-top input { flex: 1; min-width: 0; padding: 4px 6px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 11px; }
+    .add-preset-row-top button { padding: 3px 6px; font-size: 11px; flex-shrink: 0; background: #2563eb; color: #fff; border: none; }
+
+    .group-label { font-size: 10px; color: #94a3b8; margin-top: 4px; margin-bottom: 2px; font-weight: bold; }
+    .preset-group-list { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 6px; }
+
+    .preset-btn {
+      display: inline-flex; align-items: center; gap: 4px; padding: 3px 6px; border-radius: 6px; font-size: 12px; cursor: pointer; transition: all 0.2s; user-select: none; word-break: break-all;
+    }
+    .find-panel .preset-btn { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+    .find-panel .preset-btn:hover { background: #dcfce7; border-color: #86efac; }
+    .replace-panel .preset-btn { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+    .replace-panel .preset-btn:hover { background: #dbeafe; border-color: #93c5fd; }
+
+    .delete-btn { font-size: 12px; line-height: 1; color: #94a3b8; cursor: pointer; font-weight: bold; padding: 0 1px; transition: color 0.15s; }
+    .delete-btn:hover { color: #ef4444; }
+
+    /* 魔法箱按鈕樣式 */
+    .sticky-top-section {
+      padding: 16px 16px 8px 16px; background: #ffffff; border-bottom: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 12px; flex-shrink: 0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
+    }
+
+    .action-btn-bar { display: flex; gap: 8px; background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0; align-items: center; flex-wrap: nowrap; }
+
+    .btn-style-full { background-color: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .btn-style-full:hover { background-color: #dbeafe; }
+    .btn-t2s { background-color: #e6ffff; color: #006666; border: 1px solid #a6ffff; }
+    .btn-t2s:hover { background-color: #ccffff; }
+    .btn-s2t { background-color: #fbf5ff; color: #6b21a8; border: 1px solid #f1e1ff; }
+    .btn-s2t:hover { background-color: #f3d9ff; }
+    .btn-style-clear { background-color: #fffbebfb; color: #b45309; border: 1px solid #fde68a; }
+    .btn-style-clear:hover { background-color: #fef3c7; }
+    .btn-style-reset { background-color: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+    .btn-style-reset:hover { background-color: #e2e8f0; }
+    .btn-style-copy { background-color: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; margin-left: auto; }
+    .btn-style-copy:hover { background-color: #dcfce7; }
+
+    .search-inputs { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; align-items: end; background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; }
+    .input-group label { font-size: 12px; color: #475569; font-weight: 600; margin-bottom: 4px; display: block; }
+    .input-group input { width: 100%; padding: 7px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
+
+    button.btn-exec-success { background-color: #10b981; color: #ffffff; border: none; }
+    button.btn-exec-success:hover { background-color: #059669; }
+
+    .shortcut-hint { font-size: 12px; color: #64748b; margin-bottom: 4px; }
+    .scrollable-results-section { padding: 12px 16px 16px 16px; overflow-y: auto; flex: 1 1 auto; display: flex; flex-direction: column; gap: 10px; min-height: 100px; }
+
+    .select-all-bar { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #f1f5f9; border-radius: 6px; font-size: 13px; font-weight: 500; }
+    .compare-header { display: grid; grid-template-columns: 1fr 1fr 1.1fr; gap: 8px; font-size: 12px; font-weight: bold; color: #475569; padding: 0 4px; }
     .compare-header div { padding: 4px 8px; border-radius: 4px; }
     .header-left { background: #fef2f2; color: #991b1b; }
     .header-middle { background: #f0fdf4; color: #166534; }
     .header-right { background: #eff6ff; color: #1d4ed8; }
 
-    .results-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .match-card {
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      background: #ffffff;
-      overflow: hidden;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    }
+    .results-list { display: flex; flex-direction: column; gap: 10px; }
+    .match-card { border: 1px solid #cbd5e1; border-radius: 8px; background: #ffffff; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
     .match-card:hover { border-color: #2563eb; }
     
-    .card-top {
-      display: flex;
-      align-items: center;
-      background: #f8fafc;
-      padding: 5px 12px;
-      border-bottom: 1px solid #e2e8f0;
-      font-size: 12px;
-      font-weight: bold;
-      color: #334155;
-    }
+    .card-top { display: flex; align-items: center; background: #f8fafc; padding: 5px 12px; border-bottom: 1px solid #e2e8f0; font-size: 12px; font-weight: bold; color: #334155; }
     .card-top-left { display: flex; align-items: center; gap: 8px; }
     .card-top input[type="checkbox"] { width: 15px; height: 15px; cursor: pointer; }
     
-    .split-view-three {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1.1fr;
-      gap: 1px;
-      background: #cbd5e1;
-    }
-    .pane {
-      padding: 8px 10px;
-      background: #ffffff;
-      font-size: 13px;
-      line-height: 1.5;
-      word-break: break-all;
-      min-height: 52px;
-    }
+    .split-view-three { display: grid; grid-template-columns: 1fr 1fr 1.1fr; gap: 1px; background: #cbd5e1; }
+    .pane { padding: 8px 10px; background: #ffffff; font-size: 13px; line-height: 1.5; word-break: break-all; min-height: 52px; }
     .pane-left { background: #fffafa; }
     .pane-middle { background: #fbfdfb; }
-    .pane-right {
-      background: #f8fafc;
-      display: flex;
-      align-items: center;
-    }
+    .pane-right { background: #f8fafc; display: flex; align-items: center; }
 
-    .custom-replace-input {
-      padding: 6px 8px;
-      border: 1px solid #2563eb;
-      border-radius: 5px;
-      font-size: 13px;
-      width: 100%;
-      height: 44px;
-      background: #ffffff;
-      color: #0f172a;
-      font-weight: 500;
-      font-family: inherit;
-      resize: vertical;
-    }
+    .custom-replace-input { padding: 6px 8px; border: 1px solid #2563eb; border-radius: 5px; font-size: 13px; width: 100%; height: 44px; background: #ffffff; color: #0f172a; font-weight: 500; font-family: inherit; resize: vertical; }
     .custom-replace-input:focus { outline: none; box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2); }
 
     .highlight-old { background-color: #fef08a; color: #854d0e; padding: 1px 3px; border-radius: 3px; font-weight: bold; }
     .highlight-new { background-color: #bbf7d0; color: #166534; padding: 1px 3px; border-radius: 3px; font-weight: bold; }
     .delete-tag { color: #ef4444; font-size: 12px; font-style: italic; }
+    .close-btn { background: none; border: none; color: #94a3b8; font-size: 16px; cursor: pointer; padding: 0 2px; }
+    .close-btn:hover { color: #ffffff; }
   </style>
 </head>
 <body>
 
+  <!-- 標題&說明區 (獨立區域，不限制寬度) -->
   <div class="header-area">
-    <h2>拉比的文字魔法 <span class="badge">潤飾文字從我開始</span></h2>
-    <p class="desc">使用拉比的魔法一口氣處理不想看到的AI文筆吧！</p>
-    <p class="desc">一次修改半形符號、一篇文八個「一絲」、漫山遍野的「……」</p>
-    <br>
-    <p class="desc">■ 簡單使用：貼上欲修改的內文後，在拉比的魔法箱內改想要的文字。</p>
-    <p class="desc">💡 特殊規則：星號（<code>*</code> 與 <code>＊</code>）保持原狀不轉換。</p>
+    <h2>拉比的文字魔法 for 卿卿我我 <span class="badge">潤飾文字從我開始</span><span class="badge">作者：AelRime</span><span class="badge">最後更新時間：2026/08/09</span></h2>
+    <p class="desc">使用拉比的魔法一口氣處理不想看到的ＡＩ風吧！</p>
+    <p class="desc">修改半形符號、一篇文八個「一絲」、漫山遍野的「……」勾選部分詞保留不取代</p>
+    <p class="desc">勾選部分詞保留不取代或是自訂詞庫都ＯＫ！</p>
+    <p class="desc" style="margin-top: 6px;">■ 簡單使用：貼上欲修改的內文後，在拉比的魔法箱內改想要的文字，再點複製貼回網頁版</p>
+    <p class="desc">💡 魔法規則：星號（<code>*</code> 與 <code>＊</code>）保持原狀不轉換</p>
   </div>
 
-  <div class="main-container">
+  <!-- 1. 原始內文區塊 -->
+  <div id="card-raw" class="draggable-card">
+    <div id="drag-raw-bar" class="card-drag-header-light">
+      <span>📝 原始內文</span>
+      <span class="drag-hint">(請在此貼上或修改原稿，按住拖移)</span>
+    </div>
+    <div class="editor-body">
+      <textarea id="raw-text" placeholder="請在此輸入或貼上原始內文..." oninput="syncResultText()"></textarea>
+    </div>
+  </div>
+
+  <!-- 2. 變更後結果區塊 -->
+  <div id="card-result" class="draggable-card">
+    <div id="drag-result-bar" class="card-drag-header-light result-header">
+      <span style="color: #1d4ed8;">✨ 變更後結果</span>
+      <button class="btn-style-copy" style="padding: 2px 8px; font-size: 11px;" onclick="copyResultText()">複製變更後結果</button>
+    </div>
+    <div class="editor-body">
+      <textarea id="result-text" placeholder="此處會自動顯示全形轉換與取代後的結果..." readonly></textarea>
+    </div>
+  </div>
+
+  <!-- 3. 魔法箱的字典 (預設 120% 大小) -->
+  <div id="preset-window" class="draggable-card">
+    <div id="preset-drag-bar" class="card-drag-header" style="background: #334155;">
+      <div>
+        <span>📚 魔法箱的字典</span>
+        <span class="drag-hint">(按住拖移位置)</span>
+      </div>
+      <div class="header-controls">
+        <button class="scale-btn" onclick="zoomCard('preset-window', 0.1)" title="放大 10%">🔍＋</button>
+        <button class="scale-btn" onclick="zoomCard('preset-window', -0.1)" title="縮小 10%">🔍－</button>
+      </div>
+    </div>
     
-    <!-- 左側對照區 -->
-    <div class="left-section">
-      <div class="editor-card">
-        <label for="raw-text" class="section-title">
-          <span>📝 原始內文</span>
-          <span style="font-size: 12px; font-weight: normal; color: #64748b;">(請在此貼上或修改原稿)</span>
-        </label>
-        <textarea id="raw-text" placeholder="請在此輸入或貼上原始內文..." oninput="syncResultText()"></textarea>
-      </div>
-
-      <div class="editor-card result-card">
-        <label for="result-text" class="section-title">
-          <span style="color: #1d4ed8;">✨ 變更後結果</span>
-          <button class="secondary" style="padding: 4px 10px; font-size: 12px;" onclick="copyResultText()">複製變更後結果</button>
-        </label>
-        <textarea id="result-text" placeholder="此處會自動顯示全形轉換與取代後的結果..." readonly></textarea>
-      </div>
-    </div>
-
-    <!-- 綠線區域：固定式常用詞彙面板 -->
-    <div class="preset-panel">
-      <div class="preset-title">
-        <span>📌 快速尋找詞彙</span>
-      </div>
-      <div id="preset-list" class="preset-list"></div>
-
-      <div class="add-preset-box">
-        <input type="text" id="new-preset-input" placeholder="新增常用詞..." onkeyup="if(event.key==='Enter') addNewPreset()">
-        <button class="secondary" style="padding:4px 8px; font-size:12px; justify-content:center;" onclick="addNewPreset()">＋ 增加並記憶</button>
-      </div>
-    </div>
-
-    <!-- 右側：懸浮視窗 -->
-    <div id="floating-panel" class="floating-panel" style="display: flex;">
-      <div id="panel-header" class="panel-header">
-        <div class="panel-title">
-          <span>🔍 拉比的魔法箱</span>
-          <span class="drag-hint">按住可拖移視窗</span>
+    <div class="preset-panel-container">
+      <div class="preset-panel find-panel">
+        <div class="preset-header-box">
+          <div class="preset-title">📌 尋找詞彙</div>
+          <div class="btn-row-sub">
+            <button class="reset-link-btn" onclick="resetFindPresetsToDefault()">↺ 預設</button>
+            <button class="reset-link-btn clear-custom" onclick="clearFindCustomPresets()">🗑️ 清空自訂</button>
+          </div>
         </div>
+        <div class="add-preset-row-top">
+          <input type="text" id="new-find-preset-input" placeholder="新增尋找詞..." onkeyup="if(event.key==='Enter') addNewFindPreset()">
+          <button onclick="addNewFindPreset()" title="新增詞彙">＋</button>
+        </div>
+        <div class="group-label">[預設詞庫]</div>
+        <div id="find-default-list" class="preset-group-list"></div>
+        <div class="group-label">[自訂詞庫]</div>
+        <div id="find-custom-list" class="preset-group-list"></div>
+      </div>
+
+      <div class="preset-panel replace-panel">
+        <div class="preset-header-box">
+          <div class="preset-title">✨ 常用取代詞</div>
+          <div class="btn-row-sub">
+            <button class="reset-link-btn" onclick="resetReplacePresetsToDefault()">↺ 預設</button>
+            <button class="reset-link-btn clear-custom" onclick="clearReplaceCustomPresets()">🗑️ 清空自訂</button>
+          </div>
+        </div>
+        <div class="add-preset-row-top">
+          <input type="text" id="new-replace-preset-input" placeholder="新增取代詞..." onkeyup="if(event.key==='Enter') addNewReplacePreset()">
+          <button style="background-color:#2563eb;" onclick="addNewReplacePreset()" title="新增詞彙">＋</button>
+        </div>
+        <div class="group-label">[預設詞庫]</div>
+        <div id="replace-default-list" class="preset-group-list"></div>
+        <div class="group-label">[自訂詞庫]</div>
+        <div id="replace-custom-list" class="preset-group-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. 拉比的魔法箱 (預設 120% 大小) -->
+  <div id="floating-panel" class="draggable-card">
+    <div id="panel-header" class="card-drag-header">
+      <div class="panel-title">
+        <span>🔍 拉比的魔法箱</span>
+        <span class="drag-hint">按住可拖移視窗</span>
+      </div>
+      <div class="header-controls">
+        <button class="scale-btn" onclick="zoomCard('floating-panel', 0.1)" title="放大 10%">🔍＋</button>
+        <button class="scale-btn" onclick="zoomCard('floating-panel', -0.1)" title="縮小 10%">🔍－</button>
         <button class="close-btn" onclick="toggleSearchPanel()" title="關閉面板">✕</button>
       </div>
-
-      <!-- 置頂固定控制區域 -->
-      <div class="sticky-top-section">
-        <div class="action-btn-bar">
-          <button onclick="convertResultToFull()">轉為全形 (半形 → 全形)</button>
-          <button class="secondary" onclick="copyResultText()">複製結果</button>
-          <button class="warning" onclick="clearReplacementInputs()">清空取代內文</button>
-          <button class="secondary" onclick="resetToRaw()">重置為原始內文</button>
-        </div>
-
-        <div class="search-inputs">
-          <div class="input-group">
-            <label for="find-target">尋找目標：</label>
-            <input type="text" id="find-target" placeholder="例如：……" oninput="findMatches()" onkeyup="findMatches()">
-          </div>
-          <div class="input-group">
-            <label for="replace-with">預設取代為：</label>
-            <input type="text" id="replace-with" placeholder="例如：，" oninput="updateGlobalReplacement()">
-          </div>
-          <button onclick="applySelectedReplacement()" class="success">執行選取取代</button>
-        </div>
-
-        <div class="shortcut-hint">快捷鍵：按 <b>Ctrl + H</b> 可隨時隱藏/顯示此懸浮視窗。</div>
-      </div>
-
-      <!-- 獨立滾動區 -->
-      <div class="scrollable-results-section">
-        <div id="results-wrapper" style="display: none;">
-          <div class="select-all-bar">
-            <div>
-              <input type="checkbox" id="select-all" checked onchange="toggleSelectAll(this)">
-              <label for="select-all" style="display:inline; font-weight:normal; cursor:pointer;"> 全選 / 取消全選</label>
-            </div>
-            <span id="match-count" style="color:#64748b; font-size: 12px;">找到 0 筆</span>
-          </div>
-
-          <div class="compare-header" style="margin-top: 10px;">
-            <div class="header-left">◀ 變更前 (原本)</div>
-            <div class="header-middle">▶ 變更後 (預覽)</div>
-            <div class="header-right">✏️ 改成 (個別指定)</div>
-          </div>
-
-          <div id="results-list" class="results-list" style="margin-top: 8px;"></div>
-        </div>
-      </div>
-
     </div>
 
+    <div class="sticky-top-section">
+      <div class="action-btn-bar">
+        <button class="btn-style-full" onclick="convertResultToFull()">轉為全形 (半形 → 全形)</button>
+        <button class="btn-t2s" onclick="convertResultToSimp()">繁體>簡体</button>
+        <button class="btn-s2t" onclick="convertResultToTrad()">簡体>繁體</button>
+        <button class="btn-style-clear" onclick="clearReplacementInputs()">清空取代內文</button>
+        <button class="btn-style-reset" onclick="resetToRaw()">重置為原始內文</button>
+        <button class="btn-style-copy" onclick="copyResultText()">複製結果</button>
+      </div>
+
+      <div class="search-inputs">
+        <div class="input-group">
+          <label for="find-target">尋找目標：</label>
+          <input type="text" id="find-target" placeholder="例如：……" oninput="findMatches()" onkeyup="findMatches()">
+        </div>
+        <div class="input-group">
+          <label for="replace-with">預設取代為：</label>
+          <input type="text" id="replace-with" placeholder="例如：，" oninput="updateGlobalReplacement()">
+        </div>
+        <button onclick="applySelectedReplacement()" class="btn-exec-success">執行選取取代</button>
+      </div>
+
+      <div class="shortcut-hint">快捷鍵：按 <b>Ctrl + H</b> 可隨時隱藏/顯示此懸浮視窗。</div>
+    </div>
+
+    <div class="scrollable-results-section">
+      <div id="results-wrapper" style="display: none;">
+        <div class="select-all-bar">
+          <div>
+            <input type="checkbox" id="select-all" checked onchange="toggleSelectAll(this)">
+            <label for="select-all" style="display:inline; font-weight:normal; cursor:pointer;"> 全選 / 取消全選</label>
+          </div>
+          <span id="match-count" style="color:#64748b; font-size: 12px;">找到 0 筆</span>
+        </div>
+
+        <div class="compare-header" style="margin-top: 10px;">
+          <div class="header-left">◀ 變更前 (原本)</div>
+          <div class="header-middle">▶ 變更後 (預覽)</div>
+          <div class="header-right">✏️ 改成 (個別指定)</div>
+        </div>
+
+        <div id="results-list" class="results-list" style="margin-top: 8px;"></div>
+      </div>
+    </div>
   </div>
 
   <script>
     let matches = [];
-    const DEFAULT_PRESETS = ['……', '一絲', '慾火', '甜美', '意味'];
+    const DEFAULT_FIND_PRESETS = ['……', '一絲', '慾火', '甜美', '意味'];
+    const DEFAULT_REPLACE_PRESETS = ['，', '！', '。', '……', '——', '「」', '『』', '一抹', '微乎其微', '顯而易見'];
 
-    window.addEventListener('DOMContentLoaded', () => {
-      loadPresets();
-      syncResultText();
-    });
+    const TRAD_CHARS = "體簡愛氣話個門開關後點應畫發變實復張時經寫對說帶會線動業轉長來這讓過進無義熱產務報幾極節頭導構劃運標許決專創響親強總視聯類區質給聽讀視調嚴離難萬統連勝決領設權數規報強總質離難";
+    const SIMP_CHARS = "体简爱气话个门开关后点应画发变实复張時經寫對說帶會線動業轉長來這讓過進無義熱產務報幾極節頭導構劃運標許決專創響親強總視聯類區質給聽讀視調嚴離難萬統連勝決領設權數規報強總質離難";
 
-    function getSavedPresets() {
-      const saved = localStorage.getItem('rabi_text_presets');
-      if (saved) {
-        try { return JSON.parse(saved); } catch(e) {}
+    // 視窗獨立縮放比例紀錄 (預設皆為 1.2 = 120%)
+    const cardScales = {
+      'preset-window': 1.2,
+      'floating-panel': 1.2
+    };
+
+    function zoomCard(cardId, delta) {
+      if (!cardScales[cardId]) cardScales[cardId] = 1.2;
+      cardScales[cardId] = Math.max(0.5, Math.min(2.0, cardScales[cardId] + delta));
+      const card = document.getElementById(cardId);
+      if (card) {
+        card.style.transform = `scale(${cardScales[cardId].toFixed(2)})`;
       }
-      return DEFAULT_PRESETS;
     }
 
-    function loadPresets() {
-      const presets = getSavedPresets();
-      const listContainer = document.getElementById('preset-list');
-      listContainer.innerHTML = '';
+    window.addEventListener('DOMContentLoaded', () => {
+      loadAllPresets();
+      syncResultText();
+      
+      // 為 4 個區塊分別綁定拖移功能
+      makeDraggable(document.getElementById('card-raw'), document.getElementById('drag-raw-bar'));
+      makeDraggable(document.getElementById('card-result'), document.getElementById('drag-result-bar'));
+      makeDraggable(document.getElementById('preset-window'), document.getElementById('preset-drag-bar'));
+      makeDraggable(document.getElementById('floating-panel'), document.getElementById('panel-header'));
+    });
 
-      presets.forEach((word, index) => {
+    function getFindPresetsData() {
+      const savedDefaults = localStorage.getItem('rabi_find_defaults');
+      const defaults = savedDefaults ? JSON.parse(savedDefaults) : DEFAULT_FIND_PRESETS;
+      const savedCustoms = localStorage.getItem('rabi_find_customs');
+      const customs = savedCustoms ? JSON.parse(savedCustoms) : [];
+      return { defaults, customs };
+    }
+
+    function getReplacePresetsData() {
+      const savedDefaults = localStorage.getItem('rabi_replace_defaults');
+      const defaults = savedDefaults ? JSON.parse(savedDefaults) : DEFAULT_REPLACE_PRESETS;
+      const savedCustoms = localStorage.getItem('rabi_replace_customs');
+      const customs = savedCustoms ? JSON.parse(savedCustoms) : [];
+      return { defaults, customs };
+    }
+
+    function loadAllPresets() {
+      loadFindPresets();
+      loadReplacePresets();
+    }
+
+    function loadFindPresets() {
+      const { defaults, customs } = getFindPresetsData();
+      const defaultList = document.getElementById('find-default-list');
+      defaultList.innerHTML = defaults.length > 0 ? '' : '<span style="font-size:11px; color:#cbd5e1;">(已無項目)</span>';
+      defaults.forEach((word, index) => {
         const btn = document.createElement('div');
         btn.className = 'preset-btn';
-        btn.style.display = 'flex';
-        btn.style.justifyContent = 'space-between';
-        btn.style.alignItems = 'center';
-        
         btn.innerHTML = `
-          <span onclick="selectPreset('${escapeHtml(word)}')" style="flex:1; cursor:pointer;">${escapeHtml(word)}</span>
-          <span onclick="deletePreset(${index})" style="color:#ef4444; font-size:11px; padding:0 2px; cursor:pointer;" title="刪除此詞彙">✕</span>
+          <span onclick="selectFindPreset('${escapeHtml(word)}')">${escapeHtml(word)}</span>
+          <span class="delete-btn" onclick="event.stopPropagation(); deleteFindDefault(${index});" title="刪除">✕</span>
         `;
-        listContainer.appendChild(btn);
+        defaultList.appendChild(btn);
+      });
+
+      const customList = document.getElementById('find-custom-list');
+      customList.innerHTML = customs.length > 0 ? '' : '<span style="font-size:11px; color:#cbd5e1;">(無自訂詞)</span>';
+      customs.forEach((word, index) => {
+        const btn = document.createElement('div');
+        btn.className = 'preset-btn';
+        btn.innerHTML = `
+          <span onclick="selectFindPreset('${escapeHtml(word)}')">${escapeHtml(word)}</span>
+          <span class="delete-btn" onclick="event.stopPropagation(); deleteFindCustom(${index});" title="刪除">✕</span>
+        `;
+        customList.appendChild(btn);
       });
     }
 
-    function selectPreset(word) {
+    function loadReplacePresets() {
+      const { defaults, customs } = getReplacePresetsData();
+      const defaultList = document.getElementById('replace-default-list');
+      defaultList.innerHTML = defaults.length > 0 ? '' : '<span style="font-size:11px; color:#cbd5e1;">(已無項目)</span>';
+      defaults.forEach((word, index) => {
+        const btn = document.createElement('div');
+        btn.className = 'preset-btn';
+        btn.innerHTML = `
+          <span onclick="selectReplacePreset('${escapeHtml(word)}')">${escapeHtml(word)}</span>
+          <span class="delete-btn" onclick="event.stopPropagation(); deleteReplaceDefault(${index});" title="刪除">✕</span>
+        `;
+        defaultList.appendChild(btn);
+      });
+
+      const customList = document.getElementById('replace-custom-list');
+      customList.innerHTML = customs.length > 0 ? '' : '<span style="font-size:11px; color:#cbd5e1;">(無自訂詞)</span>';
+      customs.forEach((word, index) => {
+        const btn = document.createElement('div');
+        btn.className = 'preset-btn';
+        btn.innerHTML = `
+          <span onclick="selectReplacePreset('${escapeHtml(word)}')">${escapeHtml(word)}</span>
+          <span class="delete-btn" onclick="event.stopPropagation(); deleteReplaceCustom(${index});" title="刪除">✕</span>
+        `;
+        customList.appendChild(btn);
+      });
+    }
+
+    function selectFindPreset(word) {
       const rawVal = document.getElementById('raw-text').value;
       if (!document.getElementById('result-text').value && rawVal) {
         document.getElementById('result-text').value = rawVal;
       }
-      
-      const findInput = document.getElementById('find-target');
-      findInput.value = word;
+      document.getElementById('find-target').value = word;
       findMatches();
     }
 
-    function addNewPreset() {
-      const input = document.getElementById('new-preset-input');
+    function selectReplacePreset(word) {
+      document.getElementById('replace-with').value = word;
+      updateGlobalReplacement();
+    }
+
+    function addNewFindPreset() {
+      const input = document.getElementById('new-find-preset-input');
       const val = input.value.trim();
       if (!val) return;
-
-      const presets = getSavedPresets();
-      if (!presets.includes(val)) {
-        presets.push(val);
-        localStorage.setItem('rabi_text_presets', JSON.stringify(presets));
-        loadPresets();
+      const { customs } = getFindPresetsData();
+      if (!customs.includes(val)) {
+        customs.push(val);
+        localStorage.setItem('rabi_find_customs', JSON.stringify(customs));
+        loadFindPresets();
       }
       input.value = '';
     }
 
-    function deletePreset(index) {
-      const presets = getSavedPresets();
-      presets.splice(index, 1);
-      localStorage.setItem('rabi_text_presets', JSON.stringify(presets));
-      loadPresets();
+    function addNewReplacePreset() {
+      const input = document.getElementById('new-replace-preset-input');
+      const val = input.value.trim();
+      if (!val) return;
+      const { customs } = getReplacePresetsData();
+      if (!customs.includes(val)) {
+        customs.push(val);
+        localStorage.setItem('rabi_replace_customs', JSON.stringify(customs));
+        loadReplacePresets();
+      }
+      input.value = '';
+    }
+
+    function deleteFindDefault(index) {
+      const { defaults } = getFindPresetsData();
+      defaults.splice(index, 1);
+      localStorage.setItem('rabi_find_defaults', JSON.stringify(defaults));
+      loadFindPresets();
+    }
+
+    function deleteFindCustom(index) {
+      const { customs } = getFindPresetsData();
+      customs.splice(index, 1);
+      localStorage.setItem('rabi_find_customs', JSON.stringify(customs));
+      loadFindPresets();
+    }
+
+    function deleteReplaceDefault(index) {
+      const { defaults } = getReplacePresetsData();
+      defaults.splice(index, 1);
+      localStorage.setItem('rabi_replace_defaults', JSON.stringify(defaults));
+      loadReplacePresets();
+    }
+
+    function deleteReplaceCustom(index) {
+      const { customs } = getReplacePresetsData();
+      customs.splice(index, 1);
+      localStorage.setItem('rabi_replace_customs', JSON.stringify(customs));
+      loadReplacePresets();
+    }
+
+    function resetFindPresetsToDefault() {
+      if (confirm('確定要恢復尋找詞庫為預設值（並保留自訂詞）嗎？')) {
+        localStorage.removeItem('rabi_find_defaults');
+        loadFindPresets();
+      }
+    }
+
+    function resetReplacePresetsToDefault() {
+      if (confirm('確定要恢復取代詞庫為預設值（並保留自訂詞）嗎？')) {
+        localStorage.removeItem('rabi_replace_defaults');
+        loadReplacePresets();
+      }
+    }
+
+    function clearFindCustomPresets() {
+      if (confirm('確定要刪除「尋找詞」的全部自訂詞庫嗎？（預設詞庫不受影響）')) {
+        localStorage.removeItem('rabi_find_customs');
+        loadFindPresets();
+      }
+    }
+
+    function clearReplaceCustomPresets() {
+      if (confirm('確定要刪除「取代詞」的全部自訂詞庫嗎？（預設詞庫不受影響）')) {
+        localStorage.removeItem('rabi_replace_customs');
+        loadReplacePresets();
+      }
     }
 
     function syncResultText() {
@@ -521,25 +679,40 @@
       matches.forEach((m, idx) => {
         m.customReplace = '';
         const inputElem = document.getElementById(`custom-replace-input-${idx}`);
-        if (inputElem) {
-          inputElem.value = '';
-        }
+        if (inputElem) inputElem.value = '';
         updateCardPreview(idx);
       });
     }
 
     function toFullWidth(str) {
-      return str
-        .replace(/[!-~]/g, function(ch) {
-          if (ch === '*') return ch;
-          return String.fromCharCode(ch.charCodeAt(0) + 0xfee0);
-        })
-        .replace(/ /g, ' ');
+      return str.replace(/[!-~]/g, ch => ch === '*' ? ch : String.fromCharCode(ch.charCodeAt(0) + 0xfee0)).replace(/ /g, ' ');
     }
 
     function convertResultToFull() {
       const resultElem = document.getElementById('result-text');
       resultElem.value = toFullWidth(resultElem.value);
+      findMatches();
+    }
+
+    function convertResultToSimp() {
+      const resultElem = document.getElementById('result-text');
+      let str = resultElem.value, res = '';
+      for (let ch of str) {
+        let idx = TRAD_CHARS.indexOf(ch);
+        res += (idx !== -1 && idx < SIMP_CHARS.length) ? SIMP_CHARS[idx] : ch;
+      }
+      resultElem.value = res;
+      findMatches();
+    }
+
+    function convertResultToTrad() {
+      const resultElem = document.getElementById('result-text');
+      let str = resultElem.value, res = '';
+      for (let ch of str) {
+        let idx = SIMP_CHARS.indexOf(ch);
+        res += (idx !== -1 && idx < TRAD_CHARS.length) ? TRAD_CHARS[idx] : ch;
+      }
+      resultElem.value = res;
       findMatches();
     }
 
@@ -559,112 +732,87 @@
 
     function toggleSearchPanel() {
       const panel = document.getElementById('floating-panel');
-      if (panel.style.display === 'none') {
-        panel.style.display = 'flex';
+      panel.style.display = (panel.style.display === 'none') ? 'flex' : 'none';
+      if (panel.style.display === 'flex') {
         document.getElementById('find-target').focus();
         findMatches();
-      } else {
-        panel.style.display = 'none';
       }
     }
 
-    // 滑鼠拖移懸浮視窗
-    const floatingPanel = document.getElementById('floating-panel');
-    const panelHeader = document.getElementById('panel-header');
+    /* 通用拖移處理 (支援點擊置頂) */
+    let globalZIndex = 1000;
+    function makeDraggable(element, handle) {
+      let isDragging = false, offsetX = 0, offsetY = 0;
 
-    let isDragging = false;
-    let offsetX = 0;
-    let offsetY = 0;
+      element.addEventListener('mousedown', function() {
+        globalZIndex++;
+        element.style.zIndex = globalZIndex;
+      });
 
-    panelHeader.addEventListener('mousedown', function(e) {
-      if (e.target.classList.contains('close-btn')) return;
+      handle.addEventListener('mousedown', function(e) {
+        if (e.target.classList.contains('close-btn') || e.target.classList.contains('scale-btn') || e.target.tagName === 'BUTTON') return;
 
-      isDragging = true;
-      const rect = floatingPanel.getBoundingClientRect();
-      offsetX = e.clientX - rect.left;
-      offsetY = e.clientY - rect.top;
+        isDragging = true;
+        const rect = element.getBoundingClientRect();
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
 
-      floatingPanel.style.right = 'auto';
-      floatingPanel.style.left = rect.left + 'px';
-      floatingPanel.style.top = rect.top + 'px';
+        element.style.right = 'auto';
+        element.style.left = rect.left + 'px';
+        element.style.top = rect.top + 'px';
 
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp);
-    });
+        function onMouseMove(e) {
+          if (!isDragging) return;
+          let left = e.clientX - offsetX;
+          let top = e.clientY - offsetY;
+          element.style.left = Math.max(0, left) + 'px';
+          element.style.top = Math.max(0, top) + 'px';
+        }
 
-    function onMouseMove(e) {
-      if (!isDragging) return;
-      let left = e.clientX - offsetX;
-      let top = e.clientY - offsetY;
+        function onMouseUp() {
+          isDragging = false;
+          document.removeEventListener('mousemove', onMouseMove);
+          document.removeEventListener('mouseup', onMouseUp);
+        }
 
-      left = Math.max(0, Math.min(window.innerWidth - floatingPanel.offsetWidth, left));
-      top = Math.max(0, Math.min(window.innerHeight - floatingPanel.offsetHeight, top));
-
-      floatingPanel.style.left = left + 'px';
-      floatingPanel.style.top = top + 'px';
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+      });
     }
 
-    function onMouseUp() {
-      isDragging = false;
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-    }
-
-    // 關鍵修復：Unicode 符號全半形與點點相容搜尋演算法
     function findMatches() {
       let text = document.getElementById('result-text').value;
       const rawText = document.getElementById('raw-text').value;
-      
-      if (!text && rawText) {
-        text = rawText;
-        document.getElementById('result-text').value = rawText;
-      }
+      if (!text && rawText) { text = rawText; document.getElementById('result-text').value = rawText; }
 
       const target = document.getElementById('find-target').value;
       const globalReplace = document.getElementById('replace-with').value;
       const resultsWrapper = document.getElementById('results-wrapper');
 
-      if (!target || !text) {
-        matches = [];
-        if (resultsWrapper) resultsWrapper.style.display = 'none';
-        return;
-      }
+      if (!target || !text) { matches = []; if (resultsWrapper) resultsWrapper.style.display = 'none'; return; }
 
       matches = [];
-      
-      // 生成相容的所有變體符號
       let targetsToSearch = [target];
-      
-      // 判斷是否為點點類型的省略號 (包含全形、半形、三點居中、單字縮寫)
-      const isDotType = /^[……⋯\.\s\u2026]+$/.test(target);
-      if (isDotType) {
-        targetsToSearch = ['……', '⋯⋯', '...', '……', '⋯', '…', '...'];
+      if (/^[……⋯\.\s\u2026]+$/.test(target)) {
+        targetsToSearch = ['……', '⋯⋯', '...', '……', '⋯', '…', '...'].sort((a, b) => b.length - a.length);
       }
 
-      let foundIndices = new Set();
-
+      let occupiedRanges = [];
       targetsToSearch.forEach(t => {
         let index = text.indexOf(t);
         while (index !== -1) {
-          if (!foundIndices.has(index)) {
-            foundIndices.add(index);
-            matches.push({
-              index: index,
-              length: t.length,
-              selected: true,
-              customReplace: globalReplace
-            });
+          const start = index, end = index + t.length;
+          const isOverlap = occupiedRanges.some(range => (start >= range.start && start < range.end) || (end > range.start && end <= range.end));
+          if (!isOverlap) {
+            occupiedRanges.push({ start, end });
+            matches.push({ index: start, length: t.length, selected: true, customReplace: globalReplace });
           }
           index = text.indexOf(t, index + t.length);
         }
       });
 
-      // 依在文章中的出現順序排序
       matches.sort((a, b) => a.index - b.index);
-
-      if (resultsWrapper) {
-        resultsWrapper.style.display = matches.length > 0 ? 'block' : 'none';
-      }
+      if (resultsWrapper) resultsWrapper.style.display = matches.length > 0 ? 'block' : 'none';
       
       const countElem = document.getElementById('match-count');
       if (countElem) countElem.innerText = `找到 ${matches.length} 筆項目`;
@@ -680,9 +828,7 @@
       matches.forEach((m, idx) => {
         m.customReplace = globalReplace;
         const inputElem = document.getElementById(`custom-replace-input-${idx}`);
-        if (inputElem) {
-          inputElem.value = globalReplace;
-        }
+        if (inputElem) inputElem.value = globalReplace;
         updateCardPreview(idx);
       });
     }
@@ -690,7 +836,6 @@
     function renderMatches() {
       const container = document.getElementById('results-list');
       const text = document.getElementById('result-text').value;
-
       if (!container) return;
 
       if (matches.length === 0) {
@@ -702,12 +847,9 @@
       matches.forEach((m, idx) => {
         const start = Math.max(0, m.index - 25);
         const end = Math.min(text.length, m.index + m.length + 25);
-        
         const before = escapeHtml(text.substring(start, m.index));
         const matchText = escapeHtml(text.substring(m.index, m.index + m.length));
         const after = escapeHtml(text.substring(m.index + m.length, end));
-
-        const leftContent = `...${before}<span class="highlight-old">${matchText}</span>${after}...`;
 
         html += `
           <div class="match-card">
@@ -718,7 +860,7 @@
               </div>
             </div>
             <div class="split-view-three">
-              <div class="pane pane-left">${leftContent}</div>
+              <div class="pane pane-left">...${before}<span class="highlight-old">${matchText}</span>${after}...</div>
               <div class="pane pane-middle" id="pane-right-${idx}"></div>
               <div class="pane pane-right">
                 <textarea id="custom-replace-input-${idx}" class="custom-replace-input" placeholder="單獨改此筆..." oninput="updateSingleReplaceValue(${idx}, this.value)">${escapeHtml(m.customReplace)}</textarea>
@@ -728,7 +870,6 @@
         `;
       });
       container.innerHTML = html;
-
       matches.forEach((_, idx) => updateCardPreview(idx));
     }
 
@@ -741,15 +882,12 @@
       const text = document.getElementById('result-text').value;
       const m = matches[idx];
       const rightPane = document.getElementById(`pane-right-${idx}`);
-
       if (!rightPane) return;
 
       const start = Math.max(0, m.index - 25);
       const end = Math.min(text.length, m.index + m.length + 30);
-
       const before = escapeHtml(text.substring(start, m.index));
       const after = escapeHtml(text.substring(m.index + m.length, end));
-
       const replaceVal = m.customReplace;
       const replacePreview = replaceVal ? `<span class="highlight-new">${escapeHtml(replaceVal)}</span>` : `<span class="delete-tag">(刪除)</span>`;
 
@@ -775,15 +913,10 @@
     function applySelectedReplacement() {
       let text = document.getElementById('result-text').value;
       const target = document.getElementById('find-target').value;
-
       if (!target) return;
 
       const selectedMatches = matches.filter(m => m.selected).sort((a, b) => b.index - a.index);
-
-      if (selectedMatches.length === 0) {
-        alert('請至少勾選一項要取代的內容！');
-        return;
-      }
+      if (selectedMatches.length === 0) { alert('請至少勾選一項要取代的內容！'); return; }
 
       selectedMatches.forEach(m => {
         const replaceVal = m.customReplace;
@@ -792,7 +925,6 @@
 
       document.getElementById('result-text').value = text;
       alert(`已順利替換 ${selectedMatches.length} 筆文字！`);
-      
       findMatches();
     }
 
