@@ -95,7 +95,7 @@
     .card-drag-header-light.result-header { background: #eff6ff; border-bottom-color: #bfdbfe; }
     .card-drag-header-light .drag-hint { font-size: 11px; color: #64748b; font-weight: normal; }
 
-    /* 2. 各視窗預設位置與尺寸 */
+    /* 2. 各視窗預設位置與尺寸 (字典區域大幅加寬加長) */
     #card-raw {
       top: 210px;
       left: 30px;
@@ -118,24 +118,25 @@
     #preset-window {
       top: 210px;
       left: 740px;
-      width: 360px;
-      height: auto;
-      min-width: 280px;
+      width: 520px; /* 大幅拓寬避免擠壓 */
+      min-height: 600px; /* 基礎拉長 */
+      max-height: 85vh; /* 避免超過螢幕高度 */
+      min-width: 380px;
       z-index: 850;
-      resize: none;
-      transform: scale(1.2);
+      resize: both;
+      transform: scale(1.0); /* 調整預設比例更加自然 */
     }
 
     #floating-panel {
       top: 210px;
-      left: 1180px;
+      left: 1300px;
       width: 780px;
       max-height: calc(100vh - 230px);
       min-width: 480px;
       min-height: 200px;
       z-index: 900;
       resize: none;
-      transform: scale(1.2);
+      transform: scale(1.0);
     }
 
     #tc-sc-window {
@@ -146,7 +147,7 @@
       min-width: 280px;
       z-index: 950;
       resize: none;
-      transform: scale(1.2);
+      transform: scale(1.0);
       display: none;
     }
 
@@ -220,17 +221,26 @@
     }
     .btn-download-txt:hover { background-color: #ffedd5; }
 
-    /* 詞庫面板樣式 (按鈕自適應長度) */
+    /* 詞庫面板樣式 (滿版自動伸展) */
     .preset-panel-container {
       display: flex;
-      gap: 8px;
-      padding: 10px;
+      flex-direction: column;
+      gap: 10px;
+      padding: 12px;
       background: #f8fafc;
+      flex: 1 1 auto;
+      overflow-y: auto;
+    }
+
+    .preset-columns-wrapper {
+      display: flex;
+      gap: 10px;
+      flex: 1 1 auto;
     }
 
     .preset-panel {
       flex: 1 1 0;
-      min-width: 150px;
+      min-width: 170px;
       background: #ffffff;
       border-radius: 8px;
       padding: 10px;
@@ -238,10 +248,12 @@
       display: flex;
       flex-direction: column;
       gap: 6px;
-      max-height: 520px;
+      min-height: 280px;
+      max-height: 480px;
       overflow-y: auto;
     }
     .preset-panel.find-panel { border: 2px solid #10b981; }
+    .preset-panel.phrase-panel { border: 2px solid #f59e0b; background: #fffbf5; flex: none; min-height: 180px; max-height: 250px; }
     .preset-panel.replace-panel { border: 2px solid #3b82f6; }
     .preset-panel.tc-sc-panel { border: 2px solid #8b5cf6; }
 
@@ -252,10 +264,28 @@
       flex-direction: column;
       gap: 2px;
     }
+    .preset-header-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
     .preset-title { font-weight: bold; font-size: 12px; margin: 0; }
     .find-panel .preset-title { color: #065f46; }
+    .phrase-panel .preset-title { color: #b45309; }
     .replace-panel .preset-title { color: #1e40af; }
     .tc-sc-panel .preset-title { color: #5b21b6; }
+
+    .gear-btn-icon {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      padding: 0 2px;
+      color: #059669;
+      line-height: 1;
+      transition: transform 0.2s;
+    }
+    .gear-btn-icon:hover { transform: rotate(45deg); }
 
     .btn-row-sub { display: flex; gap: 6px; margin-top: 2px; }
 
@@ -290,6 +320,7 @@
       width: auto !important; 
     }
     .find-panel .preset-btn { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+    .phrase-panel .preset-btn { background: #fffbebfb; color: #b45309; border: 1px solid #fde68a; }
     .replace-panel .preset-btn { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
     .tc-sc-panel .preset-btn { background: #f5f3ff; color: #5b21b6; border: 1px solid #ddd6fe; }
 
@@ -404,7 +435,6 @@
     .close-btn { background: none; border: none; color: #94a3b8; font-size: 16px; cursor: pointer; padding: 0 2px; }
     .close-btn:hover { color: #ffffff; }
 
-    /* 勾選選單內容樣式 */
     .novel-opt-body {
       padding: 14px;
       display: flex;
@@ -456,7 +486,7 @@
   <!-- 1. 原始內文區塊 -->
   <div id="card-raw" class="draggable-card">
     <div id="drag-raw-bar" class="card-drag-header-light">
-      <span>📜🖋️ 原始內文</span>
+      <span>📝 原始內文</span>
       <div style="display: flex; align-items: center; gap: 8px;">
         <input type="file" id="txt-file-input" accept=".txt" style="display: none;" onchange="handleTxtUpload(event)">
         <button class="btn-upload-txt" onclick="document.getElementById('txt-file-input').click()">📂 上傳 .txt</button>
@@ -471,7 +501,7 @@
   <!-- 2. 變更後結果區塊 -->
   <div id="card-result" class="draggable-card">
     <div id="drag-result-bar" class="card-drag-header-light result-header">
-      <span style="color: #1d4ed8;">✨🧙‍♂️ 變更後結果 🧙‍♀️✨</span>
+      <span style="color: #1d4ed8;">✨ 變更後結果</span>
       <div style="display: flex; align-items: center; gap: 6px;">
         <button class="btn-download-txt" onclick="downloadResultTxt()">💾 下載 .txt</button>
         <button class="btn-style-copy" style="padding: 2px 8px; font-size: 11px;" onclick="copyResultText()">複製結果</button>
@@ -482,7 +512,7 @@
     </div>
   </div>
 
-  <!-- 3. 魔法箱的字典 -->
+  <!-- 3. 魔法箱的字典 (尺寸加大加長版) -->
   <div id="preset-window" class="draggable-card">
     <div id="preset-drag-bar" class="card-drag-header" style="background: #334155;">
       <div>
@@ -496,40 +526,69 @@
     </div>
     
     <div class="preset-panel-container">
-      <div class="preset-panel find-panel">
-        <div class="preset-header-box">
-          <div class="preset-title">📌 尋找詞彙</div>
-          <div class="btn-row-sub">
-            <button class="reset-link-btn" onclick="resetFindPresetsToDefault()">↺ 預設</button>
-            <button class="reset-link-btn clear-custom" onclick="clearFindCustomPresets()">🗑️ 清空自訂</button>
+      <div class="preset-columns-wrapper">
+        <!-- 尋找詞彙面板 -->
+        <div class="preset-panel find-panel">
+          <div class="preset-header-box">
+            <div class="preset-header-title-row">
+              <div class="preset-title">📌 尋找詞彙</div>
+              <button class="gear-btn-icon" onclick="togglePhrasePanel()" title="開關【替換語句】常態長句面板">⚙️</button>
+            </div>
+            <div class="btn-row-sub">
+              <button class="reset-link-btn" onclick="resetFindPresetsToDefault()">↺ 預設</button>
+              <button class="reset-link-btn clear-custom" onclick="clearFindCustomPresets()">🗑️ 清空自訂</button>
+            </div>
           </div>
+          <div class="add-preset-row-top">
+            <input type="text" id="new-find-preset-input" placeholder="新增尋找詞..." onkeyup="if(event.key==='Enter') addNewFindPreset()">
+            <button onclick="addNewFindPreset()" title="新增詞彙">＋</button>
+          </div>
+          <div class="group-label">[預設詞庫]</div>
+          <div id="find-default-list" class="preset-group-list"></div>
+          <div class="group-label">[自訂詞庫]</div>
+          <div id="find-custom-list" class="preset-group-list"></div>
         </div>
-        <div class="add-preset-row-top">
-          <input type="text" id="new-find-preset-input" placeholder="新增尋找詞..." onkeyup="if(event.key==='Enter') addNewFindPreset()">
-          <button onclick="addNewFindPreset()" title="新增詞彙">＋</button>
+
+        <!-- 常用取代詞面板 -->
+        <div class="preset-panel replace-panel">
+          <div class="preset-header-box">
+            <div class="preset-title">✨ 常用取代詞</div>
+            <div class="btn-row-sub">
+              <button class="reset-link-btn" onclick="resetReplacePresetsToDefault()">↺ 預設</button>
+              <button class="reset-link-btn clear-custom" onclick="clearReplaceCustomPresets()">🗑️ 清空自訂</button>
+            </div>
+          </div>
+          <div class="add-preset-row-top">
+            <input type="text" id="new-replace-preset-input" placeholder="新增取代詞..." onkeyup="if(event.key==='Enter') addNewReplacePreset()">
+            <button style="background-color:#2563eb;" onclick="addNewReplacePreset()" title="新增詞彙">＋</button>
+          </div>
+          <div class="group-label">[預設詞庫]</div>
+          <div id="replace-default-list" class="preset-group-list"></div>
+          <div class="group-label">[自訂詞庫]</div>
+          <div id="replace-custom-list" class="preset-group-list"></div>
         </div>
-        <div class="group-label">[預設詞庫]</div>
-        <div id="find-default-list" class="preset-group-list"></div>
-        <div class="group-label">[自訂詞庫]</div>
-        <div id="find-custom-list" class="preset-group-list"></div>
       </div>
 
-      <div class="preset-panel replace-panel">
+      <!-- 齒輪點擊叫出的【替換語句】區塊 (預設隱藏) -->
+      <div id="phrase-panel-block" class="preset-panel phrase-panel" style="display: none;">
         <div class="preset-header-box">
-          <div class="preset-title">✨ 常用取代詞</div>
+          <div class="preset-header-title-row">
+            <div class="preset-title">💬 替換語句（套路/長句）</div>
+            <button class="close-btn" style="color:#b45309;" onclick="togglePhrasePanel()" title="關閉">✕</button>
+          </div>
           <div class="btn-row-sub">
-            <button class="reset-link-btn" onclick="resetReplacePresetsToDefault()">↺ 預設</button>
-            <button class="reset-link-btn clear-custom" onclick="clearReplaceCustomPresets()">🗑️ 清空自訂</button>
+            <button class="reset-link-btn" onclick="resetPhrasePresetsToDefault()">↺ 預設</button>
+            <button class="reset-link-btn clear-custom" onclick="clearPhraseCustomPresets()">🗑️ 清空自訂</button>
           </div>
         </div>
         <div class="add-preset-row-top">
-          <input type="text" id="new-replace-preset-input" placeholder="新增取代詞..." onkeyup="if(event.key==='Enter') addNewReplacePreset()">
-          <button style="background-color:#2563eb;" onclick="addNewReplacePreset()" title="新增詞彙">＋</button>
+          <input type="text" id="new-phrase-preset-input" placeholder="新增長句/套路..." onkeyup="if(event.key==='Enter') addNewPhrasePreset()">
+          <button style="background-color:#d97706;" onclick="addNewPhrasePreset()" title="新增句型">＋</button>
         </div>
         <div class="group-label">[預設詞庫]</div>
-        <div id="replace-default-list" class="preset-group-list"></div>
+        <div id="phrase-default-list" class="preset-group-list"></div>
         <div class="group-label">[自訂詞庫]</div>
-        <div id="replace-custom-list" class="preset-group-list"></div>
+        <div id="phrase-custom-list" class="preset-group-list"></div>
       </div>
     </div>
   </div>
@@ -597,7 +656,7 @@
   <div id="floating-panel" class="draggable-card">
     <div id="panel-header" class="card-drag-header">
       <div class="panel-title">
-        <span>🧰 拉比的魔法箱</span>
+        <span>🔍 拉比的魔法箱</span>
         <span class="drag-hint">按住可拖移視窗</span>
       </div>
       <div class="header-controls">
@@ -608,7 +667,6 @@
     </div>
 
     <div class="sticky-top-section">
-      <!-- 兩行指定排版按鈕列 (自適應寬度，不擠壓) -->
       <div class="action-btn-bar">
         <div class="action-row row-1">
           <button class="btn-style-full" onclick="convertResultToFull()">轉為全形 (半形 → 全形)</button>
@@ -621,7 +679,6 @@
           <button class="btn-s2t" onclick="convertResultToTrad()">簡体>繁體</button>
           <button class="btn-tc-sc-custom" onclick="toggleTcScPanel()" title="快捷鍵 Ctrl + T">📝 自訂繁簡詞</button>
           
-          <!-- 小說體組合按鈕 + 齒輪圖示 -->
           <div class="novel-btn-group">
             <button class="btn-style-novel" onclick="transformToNovelStyle()">📖 小說體化</button>
             <button class="btn-style-novel-gear" id="btn-novel-gear" onclick="toggleNovelOptPanel(event)" title="自訂小說體化選項">⚙️</button>
@@ -667,22 +724,23 @@
 
   <script>
     let matches = [];
-    let currentFileName = ''; // 全域變數：紀錄目前上傳的檔名
+    let currentFileName = '';
 
-    const DEFAULT_FIND_PRESETS = ['……', '一絲', '慾火', '甜美', '意味'];
-    const DEFAULT_REPLACE_PRESETS = ['，', '！', '。', '……', '——', '「」', '『』', '一抹', '微乎其微', '顯而易見'];
+    const DEFAULT_FIND_PRESETS = ['……', '一絲', '危險', '幾不可聞', '慾火', '甜美', '意味', '指節泛白', '玩火', '甜膩'];
+    const DEFAULT_PHRASE_PRESETS = ['像砂紙磨過的低沉嗓音', '這不是一個', '而是一個'];
+    const DEFAULT_REPLACE_PRESETS = ['，', '！', '。', '……', '——', '「」', '『』', '一抹', '微乎其微', '顯而易見', '幾不可聞'];
 
     const TRAD_CHARS = "體簡愛氣話個門開關後點應畫發變實復張時經寫對說帶會線動業轉長來這讓過進無義熱產務報幾極節頭導構劃運標許決專創響親強總視聯類區質給聽讀視調嚴離難萬統連勝決領設權數規報強總質離難";
     const SIMP_CHARS = "体简爱气话个门开关后点应画发变实复張時經寫對說帶會線動業轉長來這讓過進無義熱產務報幾極節頭導構劃運標許決專創響親強總視聯類區質給聽讀視調嚴離難萬統連勝決領設權數規報強總質離難";
 
     const cardScales = {
-      'preset-window': 1.2,
-      'floating-panel': 1.2,
-      'tc-sc-window': 1.2
+      'preset-window': 1.0,
+      'floating-panel': 1.0,
+      'tc-sc-window': 1.0
     };
 
     function zoomCard(cardId, delta) {
-      if (!cardScales[cardId]) cardScales[cardId] = 1.2;
+      if (!cardScales[cardId]) cardScales[cardId] = 1.0;
       cardScales[cardId] = Math.max(0.5, Math.min(2.0, cardScales[cardId] + delta));
       const card = document.getElementById(cardId);
       if (card) {
@@ -703,7 +761,6 @@
       makeDraggable(document.getElementById('novel-opt-window'), document.getElementById('novel-opt-drag-bar'));
     });
 
-    // 1. 上傳 txt 檔案並紀錄檔名
     function handleTxtUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -720,7 +777,6 @@
       event.target.value = '';
     }
 
-    // 2. 下載檔名組合 (沿用檔名 + _txt_magic 或使用系統時間)
     function downloadResultTxt() {
       const text = document.getElementById('result-text').value;
       if (!text) {
@@ -762,7 +818,6 @@
       URL.revokeObjectURL(url);
     }
 
-    /* 齒輪點擊：精準動態定位並開啟選項小窗 */
     function toggleNovelOptPanel(event) {
       const win = document.getElementById('novel-opt-window');
       const isHidden = win.style.display === 'none' || !win.style.display;
@@ -808,7 +863,6 @@
       toggleNovelOptPanel();
     }
 
-    /* 📖 小說體化核心邏輯 (三個選項獨立且徹底解決時間冒號誤切) */
     function transformToNovelStyle() {
       const resultElem = document.getElementById('result-text');
       let text = resultElem.value;
@@ -822,32 +876,109 @@
       const removeSpeaker = document.getElementById('opt-remove-speaker').checked;
       const removeActions = document.getElementById('opt-remove-actions').checked;
 
-      // 1. 移除最上方的匯出標頭區塊 (=...=)
       text = text.replace(/={3,}[\s\S]*?={3,}\s*/g, '');
 
-      // 2. 獨立選項 1：去除說話者名字 (嚴格限制避開時間括號 [YYYY-MM-DD HH:MM:SS])
       if (removeSpeaker) {
         text = text.replace(/(\[\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}\]\s*)[^:\n\]]+:\s*/g, '$1');
         text = text.replace(/(^|\n)(?!\s*\[)[^:\n]+:\s*/g, '$1');
       }
 
-      // 3. 獨立選項 2：去除時間戳記 (只刪除 [YYYY-MM-DD HH:MM:SS])
       if (removeTime) {
         text = text.replace(/\[\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}\]\s*/g, '');
       }
 
-      // 4. 獨立選項 3：去除 * 動作標記 (剝除最外圍星號，保留裡面敘述)
       if (removeActions) {
         text = text.replace(/\*\((.*?)\)\*/g, '$1');
         text = text.replace(/\*(.*?)\*/g, '$1');
       }
 
-      // 5. 清理多餘空行，保持段落整潔
       text = text.replace(/\n{3,}/g, '\n\n').trim();
 
       resultElem.value = text;
       findMatches();
       alert('已成功套用小說體化設定！');
+    }
+
+    function togglePhrasePanel() {
+      const panel = document.getElementById('phrase-panel-block');
+      const isHidden = panel.style.display === 'none' || !panel.style.display;
+      panel.style.display = isHidden ? 'flex' : 'none';
+    }
+
+    function getPhrasePresetsData() {
+      const savedDefaults = localStorage.getItem('rabi_phrase_defaults');
+      const defaults = savedDefaults ? JSON.parse(savedDefaults) : DEFAULT_PHRASE_PRESETS;
+      const savedCustoms = localStorage.getItem('rabi_phrase_customs');
+      const customs = savedCustoms ? JSON.parse(savedCustoms) : [];
+      return { defaults, customs };
+    }
+
+    function loadPhrasePresets() {
+      const { defaults, customs } = getPhrasePresetsData();
+      const defaultList = document.getElementById('phrase-default-list');
+      defaultList.innerHTML = defaults.length > 0 ? '' : '<span style="font-size:11px; color:#cbd5e1;">(已無項目)</span>';
+      defaults.forEach((word, index) => {
+        const btn = document.createElement('div');
+        btn.className = 'preset-btn';
+        btn.innerHTML = `
+          <span onclick="selectFindPreset('${escapeHtml(word)}')">${escapeHtml(word)}</span>
+          <span class="delete-btn" onclick="event.stopPropagation(); deletePhraseDefault(${index});" title="刪除">✕</span>
+        `;
+        defaultList.appendChild(btn);
+      });
+
+      const customList = document.getElementById('phrase-custom-list');
+      customList.innerHTML = customs.length > 0 ? '' : '<span style="font-size:11px; color:#cbd5e1;">(無自訂句)</span>';
+      customs.forEach((word, index) => {
+        const btn = document.createElement('div');
+        btn.className = 'preset-btn';
+        btn.innerHTML = `
+          <span onclick="selectFindPreset('${escapeHtml(word)}')">${escapeHtml(word)}</span>
+          <span class="delete-btn" onclick="event.stopPropagation(); deletePhraseCustom(${index});" title="刪除">✕</span>
+        `;
+        customList.appendChild(btn);
+      });
+    }
+
+    function addNewPhrasePreset() {
+      const input = document.getElementById('new-phrase-preset-input');
+      const val = input.value.trim();
+      if (!val) return;
+      const { customs } = getPhrasePresetsData();
+      if (!customs.includes(val)) {
+        customs.push(val);
+        localStorage.setItem('rabi_phrase_customs', JSON.stringify(customs));
+        loadPhrasePresets();
+      }
+      input.value = '';
+    }
+
+    function deletePhraseDefault(index) {
+      const { defaults } = getPhrasePresetsData();
+      defaults.splice(index, 1);
+      localStorage.setItem('rabi_phrase_defaults', JSON.stringify(defaults));
+      loadPhrasePresets();
+    }
+
+    function deletePhraseCustom(index) {
+      const { customs } = getPhrasePresetsData();
+      customs.splice(index, 1);
+      localStorage.setItem('rabi_phrase_customs', JSON.stringify(customs));
+      loadPhrasePresets();
+    }
+
+    function resetPhrasePresetsToDefault() {
+      if (confirm('確定要恢復【替換語句】為預設值（並保留自訂句）嗎？')) {
+        localStorage.removeItem('rabi_phrase_defaults');
+        loadPhrasePresets();
+      }
+    }
+
+    function clearPhraseCustomPresets() {
+      if (confirm('確定要刪除【替換語句】的全部自訂詞嗎？（預設詞庫不受影響）')) {
+        localStorage.removeItem('rabi_phrase_customs');
+        loadPhrasePresets();
+      }
     }
 
     function getTcScCustomPresets() {
@@ -934,6 +1065,7 @@
 
     function loadAllPresets() {
       loadFindPresets();
+      loadPhrasePresets();
       loadReplacePresets();
       loadTcScPresets();
     }
@@ -1108,7 +1240,6 @@
       });
     }
 
-    /* 轉全形：排除星號 (*) 以及時間格式中的半形字元 */
     function toFullWidth(str) {
       let converted = str.replace(/[!-~]/g, ch => ch === '*' ? ch : String.fromCharCode(ch.charCodeAt(0) + 0xfee0)).replace(/ /g, ' ');
       
