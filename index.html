@@ -2,14 +2,14 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>拉比的文字魔法</title>
   <style>
     * { box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       margin: 0;
-      padding: 20px;
+      padding: 16px;
       color: #2c3e50;
       background-color: #f4f6f9;
       line-height: 1.5;
@@ -21,13 +21,13 @@
     /* 1. 標題&說明區 */
     .header-area { 
       width: 100%;
-      margin: 0 0 20px 10px;
+      margin: 0 0 16px 0;
     }
-    h2 { margin: 0 0 8px 0; color: #1a252f; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    h2 { margin: 0 0 8px 0; color: #1a252f; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 20px; }
     .badge { font-size: 12px; background: #e1f5fe; color: #0288d1; padding: 2px 8px; border-radius: 12px; font-weight: normal; }
-    p.desc { color: #666; font-size: 14px; margin: 2px 0; }
+    p.desc { color: #666; font-size: 13px; margin: 2px 0; }
 
-    /* 通用獨立可拖移視窗基底 */
+    /* 通用獨立可拖移視窗基底 (電腦版預設) */
     .draggable-card {
       position: absolute;
       background: #ffffff;
@@ -43,7 +43,7 @@
       transition: transform 0.15s ease-out;
     }
 
-    /* 暗色拖移握把 */
+    /* 握把樣式 */
     .card-drag-header {
       padding: 8px 14px;
       background: #1e293b;
@@ -59,7 +59,6 @@
     }
     .card-drag-header .drag-hint { font-size: 11px; color: #94a3b8; font-weight: normal; margin-left: 6px; }
 
-    /* 頂部控鈕區 */
     .header-controls {
       display: flex;
       align-items: center;
@@ -75,9 +74,7 @@
       cursor: pointer;
       line-height: 1.2;
     }
-    .scale-btn:hover { background: #475569; color: #ffffff; }
 
-    /* 淺色拖移握把 */
     .card-drag-header-light {
       padding: 10px 14px;
       background: #ffffff;
@@ -93,381 +90,163 @@
       border-bottom: 1px solid #e2e8f0;
     }
     .card-drag-header-light.result-header { background: #eff6ff; border-bottom-color: #bfdbfe; }
-    .card-drag-header-light .drag-hint { font-size: 11px; color: #64748b; font-weight: normal; }
 
-    /* 2. 各視窗預設位置與尺寸 (字典區域大幅加寬加長) */
-    #card-raw {
-      top: 210px;
-      left: 30px;
-      width: 680px;
-      height: 350px;
-      min-width: 320px;
-      min-height: 200px;
-    }
+    /* 各視窗預設位置 (電腦版) */
+    #card-raw { top: 210px; left: 30px; width: 680px; height: 350px; min-width: 320px; min-height: 200px; }
+    #card-result { top: 580px; left: 30px; width: 680px; height: 350px; min-width: 320px; min-height: 200px; border-color: #3b82f6; }
+    #preset-window { top: 210px; left: 740px; width: 520px; min-height: 600px; max-height: 85vh; min-width: 380px; z-index: 850; resize: both; }
+    #floating-panel { top: 210px; left: 1300px; width: 780px; max-height: calc(100vh - 230px); min-width: 480px; min-height: 200px; z-index: 900; resize: none; }
+    #tc-sc-window { top: 210px; left: 740px; width: 340px; height: auto; min-width: 280px; z-index: 950; resize: none; display: none; }
+    #novel-opt-window { top: 280px; left: 1500px; width: 290px; height: auto; z-index: 2000; resize: none; display: none; box-shadow: 0 10px 25px rgba(0,0,0,0.18); border: 2px solid #a855f7; }
 
-    #card-result {
-      top: 580px;
-      left: 30px;
-      width: 680px;
-      height: 350px;
-      min-width: 320px;
-      min-height: 200px;
-      border-color: #3b82f6;
-    }
-
-    #preset-window {
-      top: 210px;
-      left: 740px;
-      width: 520px; /* 大幅拓寬避免擠壓 */
-      min-height: 600px; /* 基礎拉長 */
-      max-height: 85vh; /* 避免超過螢幕高度 */
-      min-width: 380px;
-      z-index: 850;
-      resize: both;
-      transform: scale(1.0); /* 調整預設比例更加自然 */
-    }
-
-    #floating-panel {
-      top: 210px;
-      left: 1300px;
-      width: 780px;
-      max-height: calc(100vh - 230px);
-      min-width: 480px;
-      min-height: 200px;
-      z-index: 900;
-      resize: none;
-      transform: scale(1.0);
-    }
-
-    #tc-sc-window {
-      top: 210px;
-      left: 740px;
-      width: 340px;
-      height: auto;
-      min-width: 280px;
-      z-index: 950;
-      resize: none;
-      transform: scale(1.0);
-      display: none;
-    }
-
-    /* 小說體化設定獨立拖移彈窗 */
-    #novel-opt-window {
-      top: 280px;
-      left: 1500px;
-      width: 290px;
-      height: auto;
-      z-index: 2000;
-      resize: none;
-      display: none;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.18);
-      border: 2px solid #a855f7;
-    }
-
-    .editor-body {
-      padding: 12px;
-      flex: 1 1 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      height: calc(100% - 42px);
-    }
+    .editor-body { padding: 12px; flex: 1 1 auto; display: flex; flex-direction: column; gap: 8px; height: calc(100% - 42px); }
 
     textarea {
-      width: 100%;
-      height: 100%;
-      flex: 1 1 auto;
-      padding: 10px;
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      font-size: 15px;
-      font-family: inherit;
-      resize: none;
-      overflow: auto;
+      width: 100%; height: 100%; flex: 1 1 auto; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 15px; font-family: inherit; resize: none; overflow: auto;
     }
     textarea:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
     textarea[readonly] { background-color: #f8fafc; color: #1e293b; }
 
     button {
-      padding: 6px 12px;
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      background-color: #ffffff;
-      color: #334155;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
+      padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background-color: #ffffff; color: #334155; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; white-space: nowrap;
     }
     button:hover { background-color: #f1f5f9; }
 
-    /* 上傳與下載 txt 按鈕樣式 */
-    .btn-upload-txt {
-      background-color: #f0fdf4;
-      color: #15803d;
-      border: 1px solid #bbf7d0;
-      padding: 2px 8px;
-      font-size: 11px;
-    }
-    .btn-upload-txt:hover { background-color: #dcfce7; }
+    .btn-upload-txt { background-color: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; padding: 4px 8px; font-size: 12px; }
+    .btn-download-txt { background-color: #fff7ed; color: #c2410c; border: 1px solid #ffedd5; padding: 4px 8px; font-size: 12px; }
 
-    .btn-download-txt {
-      background-color: #fff7ed;
-      color: #c2410c;
-      border: 1px solid #ffedd5;
-      padding: 2px 8px;
-      font-size: 11px;
-    }
-    .btn-download-txt:hover { background-color: #ffedd5; }
-
-    /* 詞庫面板樣式 (滿版自動伸展) */
-    .preset-panel-container {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      padding: 12px;
-      background: #f8fafc;
-      flex: 1 1 auto;
-      overflow-y: auto;
-    }
-
-    .preset-columns-wrapper {
-      display: flex;
-      gap: 10px;
-      flex: 1 1 auto;
-    }
-
-    .preset-panel {
-      flex: 1 1 0;
-      min-width: 170px;
-      background: #ffffff;
-      border-radius: 8px;
-      padding: 10px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      min-height: 280px;
-      max-height: 480px;
-      overflow-y: auto;
-    }
+    .preset-panel-container { display: flex; flex-direction: column; gap: 10px; padding: 12px; background: #f8fafc; flex: 1 1 auto; overflow-y: auto; }
+    .preset-columns-wrapper { display: flex; gap: 10px; flex: 1 1 auto; }
+    .preset-panel { flex: 1 1 0; min-width: 150px; background: #ffffff; border-radius: 8px; padding: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 6px; min-height: 250px; max-height: 480px; overflow-y: auto; }
     .preset-panel.find-panel { border: 2px solid #10b981; }
     .preset-panel.phrase-panel { border: 2px solid #f59e0b; background: #fffbf5; flex: none; min-height: 180px; max-height: 250px; }
     .preset-panel.replace-panel { border: 2px solid #3b82f6; }
     .preset-panel.tc-sc-panel { border: 2px solid #8b5cf6; }
 
-    .preset-header-box {
-      border-bottom: 1px solid #e2e8f0;
-      padding-bottom: 4px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .preset-header-title-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    .preset-header-box { border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; display: flex; flex-direction: column; gap: 2px; }
+    .preset-header-title-row { display: flex; justify-content: space-between; align-items: center; }
     .preset-title { font-weight: bold; font-size: 12px; margin: 0; }
     .find-panel .preset-title { color: #065f46; }
     .phrase-panel .preset-title { color: #b45309; }
     .replace-panel .preset-title { color: #1e40af; }
     .tc-sc-panel .preset-title { color: #5b21b6; }
 
-    .gear-btn-icon {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 13px;
-      padding: 0 2px;
-      color: #059669;
-      line-height: 1;
-      transition: transform 0.2s;
-    }
-    .gear-btn-icon:hover { transform: rotate(45deg); }
+    .gear-btn-icon { background: none; border: none; cursor: pointer; font-size: 13px; padding: 0 2px; color: #059669; line-height: 1; }
 
     .btn-row-sub { display: flex; gap: 6px; margin-top: 2px; }
-
-    .reset-link-btn {
-      background: none; border: none; color: #94a3b8; font-size: 10px; padding: 0; cursor: pointer; text-align: left; transition: color 0.2s;
-    }
-    .reset-link-btn:hover { color: #ef4444; text-decoration: underline; }
-
+    .reset-link-btn { background: none; border: none; color: #94a3b8; font-size: 10px; padding: 0; cursor: pointer; }
     .add-preset-row-top { display: flex; gap: 4px; margin-top: 4px; margin-bottom: 4px; }
     .add-preset-row-top input { flex: 1; min-width: 0; padding: 4px 6px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 11px; }
     .add-preset-row-top button { padding: 3px 6px; font-size: 11px; flex-shrink: 0; background: #2563eb; color: #fff; border: none; }
 
     .group-label { font-size: 10px; color: #94a3b8; margin-top: 4px; margin-bottom: 2px; font-weight: bold; }
-    .preset-group-list { 
-      display: flex; 
-      flex-wrap: wrap; 
-      gap: 5px; 
-      margin-bottom: 6px; 
-    }
+    .preset-group-list { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 6px; }
 
-    .preset-btn {
-      display: inline-flex; 
-      align-items: center; 
-      justify-content: space-between; 
-      gap: 6px; 
-      padding: 4px 8px; 
-      border-radius: 6px; 
-      font-size: 12px; 
-      cursor: pointer; 
-      transition: all 0.2s; 
-      user-select: none; 
-      width: auto !important; 
-    }
+    .preset-btn { display: inline-flex; align-items: center; justify-content: space-between; gap: 6px; padding: 4px 8px; border-radius: 6px; font-size: 12px; cursor: pointer; user-select: none; width: auto !important; }
     .find-panel .preset-btn { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
     .phrase-panel .preset-btn { background: #fffbebfb; color: #b45309; border: 1px solid #fde68a; }
     .replace-panel .preset-btn { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
     .tc-sc-panel .preset-btn { background: #f5f3ff; color: #5b21b6; border: 1px solid #ddd6fe; }
 
-    .delete-btn { font-size: 12px; line-height: 1; color: #94a3b8; cursor: pointer; font-weight: bold; padding: 0 1px; transition: color 0.15s; }
-    .delete-btn:hover { color: #ef4444; }
+    .delete-btn { font-size: 12px; line-height: 1; color: #94a3b8; cursor: pointer; font-weight: bold; padding: 0 1px; }
 
-    /* 魔法箱按鈕排版：彈性寬度自適應 */
-    .sticky-top-section {
-      padding: 16px 16px 8px 16px; background: #ffffff; border-bottom: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 12px; flex-shrink: 0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
-    }
-
-    .action-btn-bar { 
-      display: flex !important; 
-      flex-direction: column !important; 
-      gap: 8px !important; 
-      background: #f8fafc; 
-      padding: 10px; 
-      border-radius: 8px; 
-      border: 1px solid #e2e8f0; 
-    }
-    .action-row {
-      display: flex !important;
-      flex-wrap: wrap !important;
-      gap: 8px !important;
-      width: 100% !important;
-      align-items: center;
-    }
-    
-    .action-btn-bar button { 
-      width: auto !important; 
-      flex: 1 1 auto !important;
-      text-align: center !important; 
-      white-space: nowrap !important;
-      padding: 6px 14px !important;
-      font-size: 13px !important;
-    }
+    .sticky-top-section { padding: 12px; background: #ffffff; border-bottom: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; }
+    .action-btn-bar { display: flex !important; flex-direction: column !important; gap: 8px !important; background: #f8fafc; padding: 8px; border-radius: 8px; border: 1px solid #e2e8f0; }
+    .action-row { display: flex !important; flex-wrap: wrap !important; gap: 6px !important; width: 100% !important; align-items: center; }
+    .action-btn-bar button { width: auto !important; flex: 1 1 auto !important; text-align: center !important; white-space: nowrap !important; padding: 6px 10px !important; font-size: 12px !important; }
 
     .btn-style-full { background-color: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
     .btn-t2s { background-color: #e6ffff; color: #006666; border: 1px solid #a6ffff; }
     .btn-s2t { background-color: #fbf5ff; color: #6b21a8; border: 1px solid #f1e1ff; }
     .btn-tc-sc-custom { background-color: #f3e8ff; color: #6b21a8; border: 1px solid #d8b4fe; font-weight: bold; }
-    .btn-tc-sc-custom:hover { background-color: #e9d5ff; }
     .btn-style-clear { background-color: #fffbebfb; color: #b45309; border: 1px solid #fde68a; }
     .btn-style-reset { background-color: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
     .btn-style-copy { background-color: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
     
-    /* 小說體組合按鈕容器 */
-    .novel-btn-group {
-      display: flex;
-      align-items: center;
-      flex: 1 1 auto;
-    }
-    .btn-style-novel { 
-      background-color: #faf5ff; 
-      color: #7c3aed; 
-      border: 1px solid #e9d5ff; 
-      font-weight: bold; 
-      border-top-right-radius: 0 !important;
-      border-bottom-right-radius: 0 !important;
-    }
-    .btn-style-novel:hover { background-color: #f3e8ff; }
+    .novel-btn-group { display: flex; align-items: center; flex: 1 1 auto; }
+    .btn-style-novel { background-color: #faf5ff; color: #7c3aed; border: 1px solid #e9d5ff; font-weight: bold; border-top-right-radius: 0 !important; border-bottom-right-radius: 0 !important; }
+    .btn-style-novel-gear { background-color: #faf5ff; color: #7c3aed; border: 1px solid #e9d5ff; border-left: none; padding: 6px 8px !important; border-top-left-radius: 0 !important; border-bottom-left-radius: 0 !important; font-size: 12px !important; cursor: pointer; flex: 0 0 auto !important; }
 
-    .btn-style-novel-gear {
-      background-color: #faf5ff;
-      color: #7c3aed;
-      border: 1px solid #e9d5ff;
-      border-left: none;
-      padding: 6px 10px !important;
-      border-top-left-radius: 0 !important;
-      border-bottom-left-radius: 0 !important;
-      font-size: 13px !important;
-      cursor: pointer;
-      flex: 0 0 auto !important;
-    }
-    .btn-style-novel-gear:hover { background-color: #e9d5ff; }
+    .search-inputs { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: end; background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0; }
+    .input-group label { font-size: 11px; color: #475569; font-weight: 600; margin-bottom: 2px; display: block; }
+    .input-group input { width: 100%; padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; }
 
-    .search-inputs { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; align-items: end; background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; }
-    .input-group label { font-size: 12px; color: #475569; font-weight: 600; margin-bottom: 4px; display: block; }
-    .input-group input { width: 100%; padding: 7px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
+    button.btn-exec-success { background-color: #10b981; color: #ffffff; border: none; font-weight: bold; }
 
-    button.btn-exec-success { background-color: #10b981; color: #ffffff; border: none; }
-    button.btn-exec-success:hover { background-color: #059669; }
+    .shortcut-hint { font-size: 11px; color: #64748b; }
+    .scrollable-results-section { padding: 10px; overflow-y: auto; flex: 1 1 auto; display: flex; flex-direction: column; gap: 8px; min-height: 100px; }
 
-    .shortcut-hint { font-size: 12px; color: #64748b; margin-bottom: 4px; }
-    .scrollable-results-section { padding: 12px 16px 16px 16px; overflow-y: auto; flex: 1 1 auto; display: flex; flex-direction: column; gap: 10px; min-height: 100px; }
-
-    .select-all-bar { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #f1f5f9; border-radius: 6px; font-size: 13px; font-weight: 500; }
-    .compare-header { display: grid; grid-template-columns: 1fr 1fr 1.1fr; gap: 8px; font-size: 12px; font-weight: bold; color: #475569; padding: 0 4px; }
-    .compare-header div { padding: 4px 8px; border-radius: 4px; }
+    .select-all-bar { display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; background: #f1f5f9; border-radius: 6px; font-size: 12px; font-weight: 500; }
+    .compare-header { display: grid; grid-template-columns: 1fr 1fr 1.1fr; gap: 6px; font-size: 11px; font-weight: bold; color: #475569; }
+    .compare-header div { padding: 4px 6px; border-radius: 4px; }
     .header-left { background: #fef2f2; color: #991b1b; }
     .header-middle { background: #f0fdf4; color: #166534; }
     .header-right { background: #eff6ff; color: #1d4ed8; }
 
-    .results-list { display: flex; flex-direction: column; gap: 10px; }
-    .match-card { border: 1px solid #cbd5e1; border-radius: 8px; background: #ffffff; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .results-list { display: flex; flex-direction: column; gap: 8px; }
+    .match-card { border: 1px solid #cbd5e1; border-radius: 8px; background: #ffffff; overflow: hidden; }
     
-    .card-top { display: flex; align-items: center; background: #f8fafc; padding: 5px 12px; border-bottom: 1px solid #e2e8f0; font-size: 12px; font-weight: bold; color: #334155; }
-    .card-top-left { display: flex; align-items: center; gap: 8px; }
-    .card-top input[type="checkbox"] { width: 15px; height: 15px; cursor: pointer; }
-    
+    .card-top { display: flex; align-items: center; background: #f8fafc; padding: 4px 10px; border-bottom: 1px solid #e2e8f0; font-size: 11px; font-weight: bold; color: #334155; }
     .split-view-three { display: grid; grid-template-columns: 1fr 1fr 1.1fr; gap: 1px; background: #cbd5e1; }
-    .pane { padding: 8px 10px; background: #ffffff; font-size: 13px; line-height: 1.5; word-break: break-all; min-height: 52px; }
+    .pane { padding: 6px 8px; background: #ffffff; font-size: 12px; line-height: 1.4; word-break: break-all; min-height: 48px; }
     .pane-left { background: #fffafa; }
     .pane-middle { background: #fbfdfb; }
     .pane-right { background: #f8fafc; display: flex; align-items: center; }
 
-    .custom-replace-input { padding: 6px 8px; border: 1px solid #2563eb; border-radius: 5px; font-size: 13px; width: 100%; height: 44px; background: #ffffff; color: #0f172a; font-weight: 500; font-family: inherit; resize: vertical; }
+    .custom-replace-input { padding: 4px 6px; border: 1px solid #2563eb; border-radius: 4px; font-size: 12px; width: 100%; height: 40px; background: #ffffff; }
 
-    .highlight-old { background-color: #fef08a; color: #854d0e; padding: 1px 3px; border-radius: 3px; font-weight: bold; }
-    .highlight-new { background-color: #bbf7d0; color: #166534; padding: 1px 3px; border-radius: 3px; font-weight: bold; }
-    .delete-tag { color: #ef4444; font-size: 12px; font-style: italic; }
+    .highlight-old { background-color: #fef08a; color: #854d0e; padding: 1px 2px; border-radius: 2px; font-weight: bold; }
+    .highlight-new { background-color: #bbf7d0; color: #166534; padding: 1px 2px; border-radius: 2px; font-weight: bold; }
+    .delete-tag { color: #ef4444; font-size: 11px; font-style: italic; }
     .close-btn { background: none; border: none; color: #94a3b8; font-size: 16px; cursor: pointer; padding: 0 2px; }
-    .close-btn:hover { color: #ffffff; }
 
-    .novel-opt-body {
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      background: #ffffff;
-    }
-    .novel-opt-body label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      color: #334155;
-      cursor: pointer;
-      user-select: none;
-    }
-    .novel-opt-body input[type="checkbox"] {
-      width: 16px;
-      height: 16px;
-      cursor: pointer;
-    }
-    .btn-apply-novel-opt {
-      margin-top: 6px;
-      background-color: #7c3aed;
-      color: #ffffff;
-      border: none;
-      padding: 7px 12px;
-      font-weight: bold;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .btn-apply-novel-opt:hover {
-      background-color: #6d28d9;
+    .novel-opt-body { padding: 12px; display: flex; flex-direction: column; gap: 8px; background: #ffffff; }
+    .novel-opt-body label { display: flex; align-items: center; gap: 8px; font-size: 12px; cursor: pointer; }
+    .btn-apply-novel-opt { margin-top: 4px; background-color: #7c3aed; color: #ffffff; border: none; padding: 6px 10px; font-weight: bold; border-radius: 6px; cursor: pointer; }
+
+    /* 📱 手機版專屬 RWD 自適應樣式 */
+    @media screen and (max-width: 768px) {
+      body { padding: 10px; }
+      .header-area { margin-left: 0; }
+      h2 { font-size: 18px; }
+
+      .draggable-card {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        max-height: none !important;
+        margin-bottom: 16px;
+        transform: none !important;
+        resize: none !important;
+      }
+
+      .card-drag-header, .card-drag-header-light { cursor: default; }
+      .drag-hint, .header-controls { display: none !important; }
+
+      #card-raw, #card-result { height: 280px !important; }
+
+      .preset-columns-wrapper { flex-direction: column; }
+      .preset-panel { max-height: 220px; }
+
+      .search-inputs { grid-template-columns: 1fr; }
+      .compare-header, .split-view-three { grid-template-columns: 1fr; }
+      .pane { min-height: auto; }
+      .pane-right { padding: 6px; }
+
+      #tc-sc-window, #novel-opt-window {
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        width: 90% !important;
+        z-index: 9999 !important;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      }
     }
   </style>
 </head>
@@ -475,18 +254,17 @@
 
   <!-- 標題&說明區 -->
   <div class="header-area">
-    <h2>拉比的文字魔法 for 卿卿我我 <span class="badge">潤飾文字從我開始</span><span class="badge">作者：AelRime</span><span class="badge">最後更新時間：2026/08/09</span></h2>
+    <h2>拉比的文字魔法 for 卿卿我我 <span class="badge">潤飾文字從我開始</span><span class="badge">作者：AelRime</span></h2>
     <p class="desc">使用拉比的魔法一口氣處理不想看到的ＡＩ風吧！</p>
     <p class="desc">修改半形符號、一篇文八個「一絲」、漫山遍野的「……」勾選部分詞保留不取代</p>
-    <p class="desc">勾選部分詞保留不取代或是自訂詞庫都ＯＫ！</p>
-    <p class="desc" style="margin-top: 6px;">■ 簡單使用：貼上欲修改的內文後，點擊「小說體化」按鈕一鍵去除聊天APP格式，按旁邊⚙️可自訂去除選項</p>
+    <p class="desc" style="margin-top: 4px;">■ 簡單使用：貼上欲修改的內文後，點擊「小說體化」按鈕一鍵去除聊天APP格式，按旁邊⚙️可自訂去除選項</p>
     <p class="desc">💡 魔法規則：星號（<code>*</code> 與 <code>＊</code>）及時間格式預設保持原狀不轉換</p>
   </div>
 
   <!-- 1. 原始內文區塊 -->
   <div id="card-raw" class="draggable-card">
     <div id="drag-raw-bar" class="card-drag-header-light">
-      <span>📜🖋️ 原始內文</span>
+      <span>📝 原始內文</span>
       <div style="display: flex; align-items: center; gap: 8px;">
         <input type="file" id="txt-file-input" accept=".txt" style="display: none;" onchange="handleTxtUpload(event)">
         <button class="btn-upload-txt" onclick="document.getElementById('txt-file-input').click()">📂 上傳 .txt</button>
@@ -501,7 +279,7 @@
   <!-- 2. 變更後結果區塊 -->
   <div id="card-result" class="draggable-card">
     <div id="drag-result-bar" class="card-drag-header-light result-header">
-      <span style="color: #1d4ed8;">✨🧙‍♂️ 變更後結果 🧙‍♀️✨</span>
+      <span style="color: #1d4ed8;">✨ 變更後結果</span>
       <div style="display: flex; align-items: center; gap: 6px;">
         <button class="btn-download-txt" onclick="downloadResultTxt()">💾 下載 .txt</button>
         <button class="btn-style-copy" style="padding: 2px 8px; font-size: 11px;" onclick="copyResultText()">複製結果</button>
@@ -512,7 +290,7 @@
     </div>
   </div>
 
-  <!-- 3. 魔法箱的字典 (尺寸加大加長版) -->
+  <!-- 3. 魔法箱的字典 -->
   <div id="preset-window" class="draggable-card">
     <div id="preset-drag-bar" class="card-drag-header" style="background: #334155;">
       <div>
@@ -598,11 +376,8 @@
     <div id="tc-sc-drag-bar" class="card-drag-header" style="background: #4c1d95;">
       <div>
         <span>🔤 自訂繁簡詞庫</span>
-        <span class="drag-hint">(Ctrl + T 隱藏/顯示)</span>
       </div>
       <div class="header-controls">
-        <button class="scale-btn" onclick="zoomCard('tc-sc-window', 0.1)" title="放大 10%">🔍＋</button>
-        <button class="scale-btn" onclick="zoomCard('tc-sc-window', -0.1)" title="縮小 10%">🔍－</button>
         <button class="close-btn" onclick="toggleTcScPanel()" title="關閉視窗">✕</button>
       </div>
     </div>
@@ -656,7 +431,7 @@
   <div id="floating-panel" class="draggable-card">
     <div id="panel-header" class="card-drag-header">
       <div class="panel-title">
-        <span>🧰 拉比的魔法箱</span>
+        <span>🔍 拉比的魔法箱</span>
         <span class="drag-hint">按住可拖移視窗</span>
       </div>
       <div class="header-controls">
@@ -677,7 +452,7 @@
         <div class="action-row row-2">
           <button class="btn-t2s" onclick="convertResultToSimp()">繁體>簡体</button>
           <button class="btn-s2t" onclick="convertResultToTrad()">簡体>繁體</button>
-          <button class="btn-tc-sc-custom" onclick="toggleTcScPanel()" title="快捷鍵 Ctrl + T">📝 自訂繁簡詞</button>
+          <button class="btn-tc-sc-custom" onclick="toggleTcScPanel()">📝 自訂繁簡詞</button>
           
           <div class="novel-btn-group">
             <button class="btn-style-novel" onclick="transformToNovelStyle()">📖 小說體化</button>
@@ -711,13 +486,13 @@
           <span id="match-count" style="color:#64748b; font-size: 12px;">找到 0 筆</span>
         </div>
 
-        <div class="compare-header" style="margin-top: 10px;">
-          <div class="header-left">◀ 變更前 (原本)</div>
-          <div class="header-middle">▶ 變更後 (預覽)</div>
-          <div class="header-right">✏️ 改成 (個別指定)</div>
+        <div class="compare-header" style="margin-top: 8px;">
+          <div class="header-left">◀ 原本</div>
+          <div class="header-middle">▶ 預覽</div>
+          <div class="header-right">✏️ 改成</div>
         </div>
 
-        <div id="results-list" class="results-list" style="margin-top: 8px;"></div>
+        <div id="results-list" class="results-list" style="margin-top: 6px;"></div>
       </div>
     </div>
   </div>
@@ -740,6 +515,7 @@
     };
 
     function zoomCard(cardId, delta) {
+      if (window.innerWidth <= 768) return;
       if (!cardScales[cardId]) cardScales[cardId] = 1.0;
       cardScales[cardId] = Math.max(0.5, Math.min(2.0, cardScales[cardId] + delta));
       const card = document.getElementById(cardId);
@@ -827,7 +603,7 @@
         globalZIndex++;
         win.style.zIndex = globalZIndex;
 
-        if (event && event.target) {
+        if (event && event.target && window.innerWidth > 768) {
           const rect = event.target.getBoundingClientRect();
           win.style.left = (rect.left - 20) + 'px';
           win.style.top = (rect.bottom + 10) + 'px';
@@ -863,42 +639,58 @@
       toggleNovelOptPanel();
     }
 
-    function transformToNovelStyle() {
-      const resultElem = document.getElementById('result-text');
-      let text = resultElem.value;
-      
-      if (!text) {
-        alert('目前沒有內文可以進行小說體化！');
-        return;
-      }
+/* 📖 小說體化核心邏輯 (同時支援半形 : 與全形 ： 冒號) */
+/* 📖 小說體化核心邏輯 (只刪除星號與動作括號符號，保留裡面的敘述文字與換行) */
+function transformToNovelStyle() {
+  const resultElem = document.getElementById('result-text');
+  let text = resultElem.value;
+  
+  if (!text) {
+    alert('目前沒有內文可以進行小說體化！');
+    return;
+  }
 
-      const removeTime = document.getElementById('opt-remove-time').checked;
-      const removeSpeaker = document.getElementById('opt-remove-speaker').checked;
-      const removeActions = document.getElementById('opt-remove-actions').checked;
+  const removeTime = document.getElementById('opt-remove-time').checked;
+  const removeSpeaker = document.getElementById('opt-remove-speaker').checked;
+  const removeActions = document.getElementById('opt-remove-actions').checked;
 
-      text = text.replace(/={3,}[\s\S]*?={3,}\s*/g, '');
+  // 1. 移除最上方的匯出標頭區塊 (=...=)
+  text = text.replace(/={3,}[\s\S]*?={3,}\s*/g, '');
 
-      if (removeSpeaker) {
-        text = text.replace(/(\[\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}\]\s*)[^:\n\]]+:\s*/g, '$1');
-        text = text.replace(/(^|\n)(?!\s*\[)[^:\n]+:\s*/g, '$1');
-      }
+  // 2. 按行處理，確保換行結構 100% 留存
+  let lines = text.split('\n');
 
-      if (removeTime) {
-        text = text.replace(/\[\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}\]\s*/g, '');
-      }
+  lines = lines.map(line => {
+    let cur = line;
 
-      if (removeActions) {
-        text = text.replace(/\*\((.*?)\)\*/g, '$1');
-        text = text.replace(/\*(.*?)\*/g, '$1');
-      }
-
-      text = text.replace(/\n{3,}/g, '\n\n').trim();
-
-      resultElem.value = text;
-      findMatches();
-      alert('已成功套用小說體化設定！');
+    // A. 去除說話者名字 (同時相容半形 : 與全形 ：)
+    if (removeSpeaker) {
+      cur = cur.replace(/(\[\d{4}[.-]\d{2}[.-]\d{2}\s+\d{2}:\d{2}:\d{2}\]\s*)[^:\n：]+[:：]\s*/g, '$1');
+      cur = cur.replace(/^[^\s\[:][^:\n：]*[:：]\s*/g, '');
     }
 
+    // B. 去除時間戳記 [YYYY-MM-DD HH:MM:SS]
+    if (removeTime) {
+      cur = cur.replace(/\[\d{4}[.-]\d{2}[.-]\d{2}\s+\d{2}:\d{2}:\d{2}\]\s*/g, '');
+    }
+
+    // C. 處理動作標記：只剝離 *(、)* 與 * 符號本身，保留裡面的文字！
+    if (removeActions) {
+      cur = cur.replace(/\*\(/g, ''); // 移除 *(
+      cur = cur.replace(/\)\*/g, ''); // 移除 )*
+      cur = cur.replace(/\*/g, '');   // 移除單純的 *
+    }
+
+    return cur;
+  });
+
+  // 3. 重新組合，維持小說原本的分段空行
+  text = lines.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+
+  resultElem.value = text;
+  findMatches();
+  alert('已成功套用小說體化設定！');
+}
     function togglePhrasePanel() {
       const panel = document.getElementById('phrase-panel-block');
       const isHidden = panel.style.display === 'none' || !panel.style.display;
@@ -1240,20 +1032,52 @@
       });
     }
 
-    function toFullWidth(str) {
-      let converted = str.replace(/[!-~]/g, ch => ch === '*' ? ch : String.fromCharCode(ch.charCodeAt(0) + 0xfee0)).replace(/ /g, ' ');
-      
-      const dateTimeRegex = /\[\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}\]/g;
-      const originalTimes = str.match(dateTimeRegex);
-      if (originalTimes) {
-        let i = 0;
-        converted = converted.replace(/［\d{4}－\d{2}－\d{2}\s+\d{2}：\d{2}：\d{2}］/g, () => {
-          return originalTimes[i++];
-        });
-      }
+/* 轉全形：僅轉換半形標點符號（排除英文、數字、*、=、括號 () 及時間），修復刪節號，並智慧保留人名分隔點（如：約翰．史密斯） */
+function toFullWidth(str) {
+  // 1. 保護時間與分隔線不被轉成全形
+  const protectedPatterns = [
+    /={3,}/g,                                        // 等號分隔線
+    /\[\d{4}[.-]\d{2}[.-]\d{2}\s+\d{2}:\d{2}:\d{2}\]/g, // 對話時間
+    /\d{4}[.-]\d{2}[.-]\d{2}\s+\d{2}:\d{2}:\d{2}/g      // 標頭時間
+  ];
 
-      return converted;
-    }
+  let stash = [];
+  let tempStr = str;
+
+  protectedPatterns.forEach(pattern => {
+    tempStr = tempStr.replace(pattern, (match) => {
+      stash.push(match);
+      return `XPROTECT${stash.length - 1}X`;
+    });
+  });
+
+  // 2. 第一階段：保護人名間的單個點（中文 + 點 + 中文，例：約翰.史密斯 或 約翰．史密斯）
+  tempStr = tempStr.replace(/([\u4e00-\u9fa5])[\.．]([\u4e00-\u9fa5])/g, '$1XNAMEPOINTX$2');
+
+  // 3. 第二階段：把所有連續 2 個以上的半形點 `..` 或全形點 `．．` 優先統一轉為 `……`
+  tempStr = tempStr.replace(/\.{2,}/g, '……');
+  tempStr = tempStr.replace(/．{2,}/g, '……');
+
+  // 4. 標點符號轉全形 (跳過英文、數字、*、= 以及括號 ( ))
+  let converted = tempStr.replace(/[!-~]/g, ch => {
+    if (/[a-zA-Z0-9]/.test(ch)) return ch;
+    if (ch === '*' || ch === '=' || ch === '(' || ch === ')') return ch;
+    return String.fromCharCode(ch.charCodeAt(0) + 0xfee0);
+  }).replace(/ /g, ' ');
+
+  // 5. 第三階段：掃除殘留的單個/奇數刪節號與非人名全形點
+  converted = converted.replace(/…{3,}/g, '……');       // 避免超過 2 個以上的 … 爆掉
+  converted = converted.replace(/(^|[^…])…([^…]|$)/g, '$1……$2'); // 單獨的 … 轉成 ……
+  converted = converted.replace(/．+/g, '……');          // 非人名的殘留全形點轉成 ……
+
+  // 6. 還原人名點與被保護的區塊
+  converted = converted.replace(/XNAMEPOINTX/g, '．'); // 還原為標準人名全形點 ．
+  stash.forEach((item, index) => {
+    converted = converted.replace(`XPROTECT${index}X`, item);
+  });
+
+  return converted;
+}
 
     function convertResultToFull() {
       const resultElem = document.getElementById('result-text');
@@ -1341,6 +1165,7 @@
       });
 
       handle.addEventListener('mousedown', function(e) {
+        if (window.innerWidth <= 768) return;
         if (e.target.classList.contains('close-btn') || e.target.classList.contains('scale-btn') || e.target.tagName === 'BUTTON') return;
 
         isDragging = true;
@@ -1445,10 +1270,8 @@
         html += `
           <div class="match-card">
             <div class="card-top">
-              <div class="card-top-left">
-                <input type="checkbox" id="match-chk-${idx}" ${m.selected ? 'checked' : ''} onchange="updateMatchSelection(${idx}, this.checked)">
-                <label for="match-chk-${idx}" style="cursor:pointer; display:inline;">項目 #${idx + 1}</label>
-              </div>
+              <input type="checkbox" id="match-chk-${idx}" ${m.selected ? 'checked' : ''} onchange="updateMatchSelection(${idx}, this.checked)">
+              <label for="match-chk-${idx}" style="cursor:pointer; display:inline; margin-left: 6px;">項目 #${idx + 1}</label>
             </div>
             <div class="split-view-three">
               <div class="pane pane-left">...${before}<span class="highlight-old">${matchText}</span>${after}...</div>
