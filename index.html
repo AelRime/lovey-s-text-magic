@@ -9,7 +9,7 @@
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       margin: 0;
-      padding: 16px;
+      padding: 20px;
       color: #2c3e50;
       background-color: #f4f6f9;
       line-height: 1.5;
@@ -17,15 +17,14 @@
       min-height: 100vh;
       overflow-x: hidden;
     }
-    
     /* 1. 標題&說明區 */
     .header-area { 
       width: 100%;
-      margin: 0 0 16px 0;
+      margin: 0 0 20px 20px;
     }
-    h2 { margin: 0 0 8px 0; color: #1a252f; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 20px; }
+    h2 { margin: 0 0 12px 0; color: #1a252f; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 20px; }
     .badge { font-size: 12px; background: #e1f5fe; color: #0288d1; padding: 2px 8px; border-radius: 12px; font-weight: normal; }
-    p.desc { color: #666; font-size: 13px; margin: 2px 0; }
+    p.desc { color: #666; font-size: 14px; margin: 2px 0; }
 
     /* 通用獨立可拖移視窗基底 (電腦版預設) */
     .draggable-card {
@@ -204,49 +203,50 @@
     .novel-opt-body label { display: flex; align-items: center; gap: 8px; font-size: 12px; cursor: pointer; }
     .btn-apply-novel-opt { margin-top: 4px; background-color: #7c3aed; color: #ffffff; border: none; padding: 6px 10px; font-weight: bold; border-radius: 6px; cursor: pointer; }
 
-    /* 📱 手機版專屬 RWD 自適應樣式 */
-    @media screen and (max-width: 768px) {
-      body { padding: 10px; }
-      .header-area { margin-left: 0; }
-      h2 { font-size: 18px; }
+ /* 📱 手機版專屬 RWD 自適應樣式 */
+@media screen and (max-width: 768px) {
+  body { padding: 12px; }
+  .header-area { margin-left: 0; }
+  h2 { font-size: 20px; }
+  p.desc { font-size: 13px; }
 
-      .draggable-card {
-        position: relative !important;
-        top: auto !important;
-        left: auto !important;
-        width: 100% !important;
-        min-width: 100% !important;
-        max-width: 100% !important;
-        height: auto !important;
-        min-height: auto !important;
-        max-height: none !important;
-        margin-bottom: 16px;
-        transform: none !important;
-        resize: none !important;
-      }
+  .draggable-card {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    margin-bottom: 16px;
+    transform: none !important;
+    resize: none !important;
+  }
 
-      .card-drag-header, .card-drag-header-light { cursor: default; }
-      .drag-hint, .header-controls { display: none !important; }
+  .card-drag-header, .card-drag-header-light { cursor: default; }
+  .drag-hint, .header-controls { display: none !important; }
 
-      #card-raw, #card-result { height: 280px !important; }
+  #card-raw, #card-result { height: 280px !important; }
 
-      .preset-columns-wrapper { flex-direction: column; }
-      .preset-panel { max-height: 220px; }
+  .preset-columns-wrapper { flex-direction: column; }
+  .preset-panel { max-height: 220px; }
 
-      .search-inputs { grid-template-columns: 1fr; }
-      .compare-header, .split-view-three { grid-template-columns: 1fr; }
-      .pane { min-height: auto; }
-      .pane-right { padding: 6px; }
+  .search-inputs { grid-template-columns: 1fr; }
+  .compare-header, .split-view-three { grid-template-columns: 1fr; }
+  .pane { min-height: auto; }
+  .pane-right { padding: 6px; }
 
-      #tc-sc-window, #novel-opt-window {
-        position: fixed !important;
-        top: 50% !important;
-        left: 50% !important;
-        transform: translate(-50%, -50%) !important;
-        width: 90% !important;
-        z-index: 9999 !important;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      }
+  #tc-sc-window, #novel-opt-window {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 90% !important;
+    z-index: 9999 !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  }
     }
   </style>
 </head>
@@ -257,6 +257,7 @@
     <h2>拉比的文字魔法 for 卿卿我我 <span class="badge">潤飾文字從我開始</span><span class="badge">作者：AelRime</span></h2>
     <p class="desc">使用拉比的魔法一口氣處理不想看到的ＡＩ風吧！</p>
     <p class="desc">修改半形符號、一篇文八個「一絲」、漫山遍野的「……」勾選部分詞保留不取代</p>
+    <p class="desc">勾選部分詞保留不取代或是自訂詞庫都ＯＫ！</p>
     <p class="desc" style="margin-top: 4px;">■ 簡單使用：貼上欲修改的內文後，點擊「小說體化」按鈕一鍵去除聊天APP格式，按旁邊⚙️可自訂去除選項</p>
     <p class="desc">💡 魔法規則：星號（<code>*</code> 與 <code>＊</code>）及時間格式預設保持原狀不轉換</p>
   </div>
@@ -265,10 +266,11 @@
   <div id="card-raw" class="draggable-card">
     <div id="drag-raw-bar" class="card-drag-header-light">
       <span>📝 原始內文</span>
-      <div style="display: flex; align-items: center; gap: 8px;">
+      <div style="display: flex; align-items: center; gap: 6px;">
         <input type="file" id="txt-file-input" accept=".txt" style="display: none;" onchange="handleTxtUpload(event)">
         <button class="btn-upload-txt" onclick="document.getElementById('txt-file-input').click()">📂 上傳 .txt</button>
-        <span class="drag-hint">(請貼上或上傳，按住拖移)</span>
+        <button class="btn-style-copy" style="padding: 2px 8px; font-size: 11px; background-color: #f0fdf4; color: #166534; border: 1px solid #bbf7d0;" onclick="pasteToRawText()">📋 貼上內文</button>
+        <span class="drag-hint">(按住拖移)</span>
       </div>
     </div>
     <div class="editor-body">
@@ -279,10 +281,11 @@
   <!-- 2. 變更後結果區塊 -->
   <div id="card-result" class="draggable-card">
     <div id="drag-result-bar" class="card-drag-header-light result-header">
-      <span style="color: #1d4ed8;">✨ 變更後結果</span>
+      <span style="color: #1d4ed8;">✨🧙‍♂️ 變更後結果 🧙‍♀️✨</span>
       <div style="display: flex; align-items: center; gap: 6px;">
         <button class="btn-download-txt" onclick="downloadResultTxt()">💾 下載 .txt</button>
         <button class="btn-style-copy" style="padding: 2px 8px; font-size: 11px;" onclick="copyResultText()">複製結果</button>
+       <span class="drag-hint">(按住拖移)</span>
       </div>
     </div>
     <div class="editor-body">
@@ -295,7 +298,7 @@
     <div id="preset-drag-bar" class="card-drag-header" style="background: #334155;">
       <div>
         <span>📚 魔法箱的字典</span>
-        <span class="drag-hint">(按住拖移位置)</span>
+       <span class="drag-hint">(按住拖移)</span>
       </div>
       <div class="header-controls">
         <button class="scale-btn" onclick="zoomCard('preset-window', 0.1)" title="放大 10%">🔍＋</button>
@@ -431,8 +434,8 @@
   <div id="floating-panel" class="draggable-card">
     <div id="panel-header" class="card-drag-header">
       <div class="panel-title">
-        <span>🔍 拉比的魔法箱</span>
-        <span class="drag-hint">按住可拖移視窗</span>
+        <span>🧰 拉比的魔法箱</span>
+       <span class="drag-hint">(按住拖移)</span>
       </div>
       <div class="header-controls">
         <button class="scale-btn" onclick="zoomCard('floating-panel', 0.1)" title="放大 10%">🔍＋</button>
@@ -639,6 +642,19 @@
       toggleNovelOptPanel();
     }
 
+　async function pasteToRawText() {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (!text) {
+          alert('剪貼簿目前沒有內容！');
+          return;
+        }
+        document.getElementById('raw-text').value = text;
+        syncResultText(); // 自動同步到結果區並重新尋找比對
+      } catch (err) {
+        alert('無法存取剪貼簿，請確認瀏覽器是否已授權剪貼簿讀取權限，或是手動 Ctrl + V 貼上！');
+      }
+    }
 /* 📖 小說體化核心邏輯 (同時支援半形 : 與全形 ： 冒號) */
 /* 📖 小說體化核心邏輯 (只刪除星號與動作括號符號，保留裡面的敘述文字與換行) */
 function transformToNovelStyle() {
